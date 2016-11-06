@@ -1,0 +1,244 @@
+/* CSS declarations go here */
+
+
+.at-form {
+  margin-top:0 !important;
+  padding:0 !important;
+}
+
+.at-title h3 {
+  font-size:2em;
+}
+
+.at-input .control-label{
+  float:left;
+  left:0;
+}
+
+.at-error.alert.alert-danger {
+  margin:0 !important;
+  padding:5px 0px 5px 0px !important;
+}
+
+/*  loading message */
+
+.pg-loading-html {
+  margin-top: 30px !important;
+}
+
+.spinner {
+  margin: auto;
+  text-align: center;
+}
+
+.spinner > div > div {
+  width: 18px;
+  height: 18px;
+  background-color: #333;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+
+.loading-message {
+  color: #eee;
+  font-size: 25px;
+  font-family: Calibri;
+}
+
+
+/****** form validation error messages *******/
+
+label.error {
+  color:red;
+  position:relative;
+  float:right;
+  margin-top:-34px;
+  margin-right:10px;
+  font-weight: 600;
+}
+
+/******** icon sizes ***********/
+
+.small-icon { font-size:10px !important; }
+.normal-icon { font-size:14px !important; }
+.big-icon { font-size:18px !important; }
+.huge-icon { font-size:22px !important; }
+.very-huge-icon { font-size:26px !important; }
+.red-icon { color:red; }
+.green-icon { color:green; }
+.blue-icon { color:blue; }
+.gray-icon { color:#333; }
+.light-gray-icon { color:#ccc; }
+
+
+/******* toastr message ********/
+
+div.toast-message {
+  line-height: 1.1em;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+
+
+/******** datatables paginate buttons ***********/
+
+.pagination .paginate_button {
+  display: inline-block;
+  font-size:1.2em;
+  padding: 0.5em 1em;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  *cursor: hand;
+  color: #333333 !important;
+}
+
+.dataTables_filter {
+  float:right;
+  position:relative;
+}
+
+.dataTables_filter input {
+  border-radius: 4px;
+  margin-left:10px;
+  -webkit-appearance: none;
+  border: solid 1px #eee;
+  color: #555;
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #fff;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  line-height: 1.42857143;
+}
+
+.dataTables_filter input:focus {
+  border-color: #66afe9;
+outline: 0;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+
+.dataTables_length {
+  float:left;
+  position:relative;
+}
+
+.dataTables_paginate {
+  margin-top:20px;
+}
+
+.dataTables_paginate a{
+  margin:10px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/**********  datatables sorting ************/
+
+table.dataTable td a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*
+ * Table styles
+ */
+table.dataTable {
+  width: 100%;
+  margin: 0 auto;
+  clear: both;
+  padding-top:20px;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  font-family: inherit;
+  /*
+   * Header and footer styles
+   */
+  /*
+   * Body styles
+   */
+}
+
+
+table.dataTable thead th,
+table.dataTable tfoot th {
+  font-weight: bold;
+}
+table.dataTable thead th,
+table.dataTable thead td {
+  padding: 10px 18px;
+}
+table.dataTable thead th:active,
+table.dataTable thead td:active {
+  outline: none;
+}
+table.dataTable tfoot th,
+table.dataTable tfoot td {
+  padding: 10px 18px 6px 18px;
+}
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+  cursor: pointer;
+  *cursor: hand;
+}
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+table.dataTable thead .sorting {
+  background-image: url("/img/sorting/sort_both.png");
+}
+table.dataTable thead .sorting_asc {
+  background-image: url("/img/sorting/sort_asc.png");
+}
+table.dataTable thead .sorting_desc {
+  background-image: url("/img/sorting/sort_desc.png");
+}
+table.dataTable thead .sorting_asc_disabled {
+  background-image: url("/img/sorting/sort_asc_disabled.png");
+}
+table.dataTable thead .sorting_desc_disabled {
+  background-image: url("/img/sorting/sort_desc_disabled.png");
+}

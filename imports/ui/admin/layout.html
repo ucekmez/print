@@ -1,0 +1,30 @@
+<template name="AdminPanel">
+  <div class="panel-top-menu">
+    <div class="12u 12u(small)" style="text-align:center;font-size:1em;">
+      <a href="{{ pathFor 'admin_ads_index' }}" class="button small-button clean-button icon fa-file-text-o">Reklam</a>
+      <a href="{{ pathFor 'admin_printeries_index' }}" class="button small-button clean-button icon fa-file-text-o">Matbaa</a>
+      <a href="{{ pathFor 'admin_users_index' }}" class="button small-button clean-button icon fa-file-text-o">Kullanıcı</a>
+    </div>
+  </div>
+</template>
+
+
+<template name="AdminFirstPage">
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium)">
+
+          <!-- Content -->
+            <div id="content">
+              <section class="last">
+                <h2>Merhaba, {{ currentUser.profile.name }}!</h2>
+                <p>Burada bazı istatistiksel bilgiler yer alacak</p>
+              </section>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
