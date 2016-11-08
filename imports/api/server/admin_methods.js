@@ -4,40 +4,70 @@ import { Printeries } from '/imports/api/collections/printeries.js';
 
 Meteor.methods({
   add_new_company(type, companyname, email, password){
-    // yeni bir kullanici olusturuyoruz
-    const user_id = Accounts.createUser({
-      email: email,
-      password: password,
-    });
-    // olusturdugumuz kullaniciya firma rolunu veriyoruz
+    const user_id = Accounts.createUser({ email: email, password: password, });
     if (type == 'advertiser') {
       Roles.addUsersToRoles(user_id, ['advertiser']);
-      // yeni bir firma olusturuyoruz
-      const company_id = Advertisers.insert({
-        name: companyname,
-        commercial_name: "",
-        address: "",
-        phone: "",
-
-      });
-      // olusturdugumuz firmanin yetkilisi olacak kullaniciyi bagliyoruz
-      Advertisers.update(company_id, { $set: {user: user_id, email: email}});
+      const company_id = Advertisers.insert({ name: companyname, user: user_id, email: email});
     }else if (type == 'printery') {
       Roles.addUsersToRoles(user_id, ['printery']);
-      // yeni bir firma olusturuyoruz
-      const company_id = Printeries.insert({
-        name: companyname,
-        commercial_name: "",
-        address: "",
-        phone: "",
-
-      });
-      // olusturdugumuz firmanin yetkilisi olacak kullaniciyi bagliyoruz
-      Printeries.update(company_id, { $set: {user: user_id, email: email}});
+      const company_id = Printeries.insert({ name: companyname, user: user_id, email: email, });
     }else {
       return "error";
     }
+  },
 
+  edit_company(type, sid, companyname, commercial_name, email, password, address, phone, authorized, authorized_phone){
+    if (type == 'advertiser') {
+      const company = Advertisers.findOne({ shortid: sid });
+
+      try {
+        Meteor.users.update({ _id: company.user}, { $set: { 'emails.0.address': email }});
+      }catch (err) { throw new Meteor.Error(451, 'Hata! Bu Email zaten kayıtlı'); }
+      Advertisers.update({ _id: company._id }, {
+        $set: {
+          name: companyname,
+          email: email,
+          address: address,
+          phone: phone,
+          commercial_name: commercial_name,
+          authorized: authorized,
+          authorized_phone: authorized_phone
+        }
+      });
+      if (password) {
+        Accounts.setPassword(company.user, password);
+      }
+    }else if (type == 'printery') {
+      const company = Printeries.findOne({ shortid: sid });
+
+      try {
+        Meteor.users.update({ _id: company.user}, { $set: { 'emails.0.address': email }});
+      }catch (err) { throw new Meteor.Error(451, 'Hata! Bu Email zaten kayıtlı'); }
+
+      Printeries.update({ _id: company._id }, {
+        $set: {
+          name: companyname,
+          email: email,
+          address: address,
+          phone: phone,
+          commercial_name: commercial_name,
+          authorized: authorized,
+          authorized_phone: authorized_phone
+        }
+      });
+      if (password) {
+        Accounts.setPassword(company.user, password);
+      }
+    }else { return "error"; }
+  },
+
+  edit_printery_location(sid, lat, lng) {
+    Printeries.update({ shortid: sid }, {
+      $set: {
+        location_lat: lat,
+        location_lng: lng
+      }
+    });
   },
 
 

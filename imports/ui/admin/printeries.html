@@ -19,7 +19,7 @@
   <div id="main-wrapper">
     <div class="container">
       <div class="row 200%">
-        <div class="12u 12u(medium)" style="text-align:center;">
+        <div class="12u 12u(medium)">
           <!-- Content -->
             <div id="content">
 
@@ -56,7 +56,7 @@
                 <div class="form-actions">
                   <div class="form-group row">
                     <div class="9u 8u(medium)">
-                      <button type="submit" class="button fluid-button clean-button icon fa-save">Kaydet</button>
+                      <button type="button" class="button fluid-button clean-button icon fa-save" id="admin_add_new_printery_save">Kaydet</button>
                     </div>
                     <div class="3u 4u(medium)">
                       <a class="button fluid-button clean-button alt icon fa-undo" id="admin-add-new-printery-form-reset">Sıfırla</a>
@@ -72,11 +72,135 @@
 </template>
 
 
+<template name="AdminEditPrintery">
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium)">
+          <!-- Content -->
+            <div id="content">
+
+              <h2>{{ printery.name }}</h2>
+
+              <form id="admin-edit-printery-form">
+                <div class="form-group row">
+                  <div class="12u 12u(medium) right-aligned gray-colored">
+                    Son güncelleme: {{#if printery.updatedAt}}{{ dateFromNow printery.updatedAt }}{{else}}{{ dateFromNow printery.createdAt }}{{/if}}
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_companyname">Firma Adı</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="Firma Adı" value="{{ printery.name }}" id="edit_printery_companyname" name="edit_printery_companyname" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_commercial_name">Ticari Ünvan</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="Firma Adı Ltd. Şti." value="{{ printery.commercial_name }}" id="edit_printery_commercial_name" name="edit_printery_commercial_name" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_address">Adres</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="X Cd. Y Sk, İstanbul, Türkiye" value="{{ printery.address }}" id="edit_printery_address" name="edit_printery_address" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_phone">Telefon</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="0212 123 4567" value="{{ printery.phone }}" id="edit_printery_phone" name="edit_printery_phone" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_authorized">Yetkili Kişi</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="İsim Soyisim" value="{{ printery.authorized }}" id="edit_printery_authorized" name="edit_printery_authorized" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_authorized_phone">Yetkili Telefon</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="0532 123 4567" value="{{ printery.authorized_phone }}" id="edit_printery_authorized_phone" name="edit_printery_authorized_phone" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_email">Firma E-Posta</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="admin@firma.ltd" value="{{ printery.email }}" id="edit_printery_email" name="edit_printery_email" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_password">Parola</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="password" class="form-control" placeholder="********" id="edit_printery_password" name="edit_printery_password">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_printery_address_map">Harita Adres</label>
+                  </div>
+                  <div class="9u 9u(medium)" id="tooltip">
+                    <input type="text" class="form-control" placeholder="X Cd. Y Sk, İstanbul, Türkiye" value="{{ printery.address_map }}" id="edit_printery_address_map" name="edit_printery_address_map">
+                    <span class="printery_address_tooltip">Burası yalnızca haritada yerinizi rahat bulabilmeniz içindir.</span>
+                  </div>
+                </div>
+
+
+                <div class="form-group row">
+                  <div class="12u 12u(medium) left-aligned" style="height:300px;">
+                    {{> googleMap name="printeryMap" options=mapOptions}}
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <div class="form-group row">
+                    <div class="9u 8u(medium)">
+                      <button type="button" class="button fluid-button clean-button icon fa-save" id="admin_edit_printery_save">Kaydet</button>
+                    </div>
+                    <div class="3u 4u(medium)">
+                      <a href="{{ pathFor 'admin_ads_list_printeries' }}" class="button fluid-button clean-button alt icon fa-remove">İptal</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <template name="AdminListPrinteries">
   <div id="main-wrapper">
     <div class="container">
       <div class="row 200%">
-        <div class="12u 12u(medium)" style="text-align:center;">
+        <div class="12u 12u(medium)">
           <!-- Content -->
             <div id="content">
 
@@ -99,7 +223,7 @@
                         {{#each printeries }}
                           <tr>
                             <td>{{ index }}</td>
-                            <td><a href="#" style="font-size:1.1em;"><i class="icmn-pencil7"></i> {{ name }}</a></td>
+                            <td><a href="{{ pathFor 'admin_printeries_edit_printery' prntSID=shortid }}" style="font-size:1.1em;"> {{ name }}</a></td>
                             <td>{{ email }}</td>
                             <td>...</td>
                           </tr>

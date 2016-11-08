@@ -19,7 +19,7 @@
   <div id="main-wrapper">
     <div class="container">
       <div class="row 200%">
-        <div class="12u 12u(medium)" style="text-align:center;">
+        <div class="12u 12u(medium)">
           <!-- Content -->
             <div id="content">
 
@@ -56,10 +56,117 @@
                 <div class="form-actions">
                   <div class="form-group row">
                     <div class="9u 8u(medium)">
-                      <button type="submit" class="button fluid-button clean-button icon fa-save">Kaydet</button>
+                      <button type="button" class="button fluid-button clean-button icon fa-save" id="admin_add_new_advertiser_save">Kaydet</button>
                     </div>
                     <div class="3u 4u(medium)">
                       <a class="button fluid-button clean-button alt icon fa-undo" id="admin-add-new-advertiser-form-reset">Sıfırla</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="AdminEditAdvertiser">
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium)">
+          <!-- Content -->
+            <div id="content">
+
+              <h2>{{ advertiser.name }}</h2>
+
+              <form id="admin-edit-advertiser-form">
+                <div class="form-group row">
+                  <div class="12u 12u(medium) right-aligned gray-colored">
+                    Son güncelleme: {{#if advertiser.updatedAt}}{{ dateFromNow advertiser.updatedAt }}{{else}}{{ dateFromNow advertiser.createdAt }}{{/if}}
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_advertiser_companyname">Firma Adı</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="Firma Adı" value="{{ advertiser.name }}" id="edit_advertiser_companyname" name="edit_advertiser_companyname" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_advertiser_commercial_name">Ticari Ünvan</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="Firma Adı Ltd. Şti." value="{{ advertiser.commercial_name }}" id="edit_advertiser_commercial_name" name="edit_advertiser_commercial_name" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_advertiser_address">Adres</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="X Cd. Y Sk, İstanbul, Türkiye" value="{{ advertiser.address }}" id="edit_advertiser_address" name="edit_advertiser_address" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_advertiser_phone">Telefon</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="0212 123 4567" value="{{ advertiser.phone }}" id="edit_advertiser_phone" name="edit_advertiser_phone" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_advertiser_authorized">Yetkili Kişi</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="İsim Soyisim" value="{{ advertiser.authorized }}" id="edit_advertiser_authorized" name="edit_advertiser_authorized" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_advertiser_authorized_phone">Yetkili Telefon</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="0532 123 4567" value="{{ advertiser.authorized_phone }}" id="edit_advertiser_authorized_phone" name="edit_advertiser_authorized_phone" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_advertiser_email">Firma E-Posta</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="text" class="form-control required" placeholder="admin@firma.ltd" value="{{ advertiser.email }}" id="edit_advertiser_email" name="edit_advertiser_email" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label" for="edit_advertiser_password">Parola</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    <input type="password" class="form-control" placeholder="********" id="edit_advertiser_password" name="edit_advertiser_password">
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <div class="form-group row">
+                    <div class="9u 8u(medium)">
+                      <button type="button" class="button fluid-button clean-button icon fa-save" id="admin_edit_advertiser_save">Kaydet</button>
+                    </div>
+                    <div class="3u 4u(medium)">
+                      <a href="{{ pathFor 'admin_ads_list_advertisers' }}" class="button fluid-button clean-button alt icon fa-remove">İptal</a>
                     </div>
                   </div>
                 </div>
@@ -76,7 +183,7 @@
   <div id="main-wrapper">
     <div class="container">
       <div class="row 200%">
-        <div class="12u 12u(medium)" style="text-align:center;">
+        <div class="12u 12u(medium)">
           <!-- Content -->
             <div id="content">
 
@@ -99,7 +206,7 @@
                         {{#each advertisers }}
                           <tr>
                             <td>{{ index }}</td>
-                            <td><a href="#" style="font-size:1.1em;"><i class="icmn-pencil7"></i> {{ name }}</a></td>
+                            <td><a href="{{ pathFor 'admin_ads_edit_advertiser' advSID=shortid }}" style="font-size:1.1em;"> {{ name }}</a></td>
                             <td>{{ email }}</td>
                             <td>...</td>
                           </tr>

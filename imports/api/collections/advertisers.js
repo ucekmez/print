@@ -3,12 +3,14 @@ export const Advertisers = new Mongo.Collection("advertisers");
 import shortid from 'shortid';
 
 Advertisers.attachSchema(new SimpleSchema({
-  name            : { type: String, max: 256 },
-  user            : { type: String, optional: true },
-  email           : { type: String, optional: true },
-  commercial_name : { type: String, optional: true },
-  address         : { type: String, optional: true },
-  phone           : { type: String, optional: true },
+  name             : { type: String, max: 256 },
+  user             : { type: String, optional: true },
+  email            : { type: String, optional: true },
+  commercial_name  : { type: String, optional: true },
+  address          : { type: String, optional: true },
+  phone            : { type: String, optional: true },
+  authorized       : { type: String, optional: true },
+  authorized_phone : { type: String, optional: true },
 
   shortid : {
     type: String,

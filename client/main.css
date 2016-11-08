@@ -74,6 +74,24 @@
 }
 
 
+#tooltip .printery_address_tooltip {
+  visibility: hidden;
+  width: 300px;
+  background-color: rgba(0,0,0,0.5);
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  line-height: normal;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+#tooltip:hover .printery_address_tooltip {
+  visibility: visible;
+}
+
+
 /****** form validation error messages *******/
 
 label.error {
@@ -119,7 +137,6 @@ div.toast-message {
   text-align: center;
   text-decoration: none !important;
   cursor: pointer;
-  *cursor: hand;
   color: #333333 !important;
 }
 
@@ -217,7 +234,6 @@ table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc {
   cursor: pointer;
-  *cursor: hand;
 }
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,

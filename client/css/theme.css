@@ -45,6 +45,21 @@
 		text-align:center;
 	}
 
+	.gray-colored {
+		color:#aaa;
+	}
+
+	.red-colored {
+		color:red;
+	}
+
+	.form-group.row {
+		padding-top:20px;
+	}
+	.form-group.row > * {
+		padding-top:0px;
+	}
+
 	/****** form validation error messages *******/
 
 	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
@@ -114,7 +129,12 @@
 		width: 1400px;
 	}
 
+
 	@media screen and (max-width: 1680px) {
+
+		.form-actions {
+		  padding-top:40px;
+		}
 
 		a.small-button {
 			font-size:1.6em;
@@ -153,6 +173,10 @@
 	}
 
 	@media screen and (max-width: 1280px) {
+
+		.form-actions {
+			padding-top:20px;
+		}
 
 		a.small-button {
 			font-size:1.6em;
@@ -1578,23 +1602,23 @@
 	}
 
 	form .formerize-placeholder {
-		color: #555 !important;
+		color: #bbb !important;
 	}
 
 	form ::-webkit-input-placeholder {
-		color: #555 !important;
+		color: #bbb !important;
 	}
 
 	form :-moz-placeholder {
-		color: #555 !important;
+		color: #bbb !important;
 	}
 
 	form ::-moz-placeholder {
-		color: #555 !important;
+		color: #bbb !important;
 	}
 
 	form :-ms-input-placeholder {
-		color: #555 !important;
+		color: #bbb !important;
 	}
 
 	form ::-moz-focus-inner {

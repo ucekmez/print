@@ -10,11 +10,28 @@ Meteor.publish("admin_list_advertisers", function() {
   }
 });
 
+Meteor.publish("admin_single_advertiser", function(SID) {
+  if (Roles.userIsInRole(this.userId, ['admin'])) {
+    return Advertisers.find({ shortid: SID });
+  }
+});
+
+
+
+
 Meteor.publish("admin_list_printeries", function() {
   if (Roles.userIsInRole(this.userId, ['admin'])) {
     return Printeries.find();
   }
 });
+
+Meteor.publish("admin_single_printery", function(SID) {
+  if (Roles.userIsInRole(this.userId, ['admin'])) {
+    return Printeries.find({ shortid: SID });
+  }
+});
+
+
 
 Meteor.publish("admin_list_users", function() {
   if (Roles.userIsInRole(this.userId, ['admin'])) {

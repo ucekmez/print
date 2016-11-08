@@ -37,6 +37,19 @@ adminAdRoutes.route('/new', { name: 'admin_ads_add_new_advertiser',
   }
 });
 
+adminAdRoutes.route('/edit/:advSID', { name: 'admin_ads_edit_advertiser',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_single_advertiser', Meteor.subscribe("admin_single_advertiser", params.advSID));
+    }
+  },
+  action() {
+    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminEditAdvertiser' });
+    NProgress.done();
+  }
+});
+
+
 adminAdRoutes.route('/list', { name: 'admin_ads_list_advertisers',
   subscriptions: function(params, queryParams) {
     if(Meteor.isClient) {
@@ -63,6 +76,18 @@ adminPrinteryRoutes.route('/', { name: 'admin_printeries_index',
 adminPrinteryRoutes.route('/new', { name: 'admin_printeries_add_new_printery',
   action() {
     BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewPrintery' });
+    NProgress.done();
+  }
+});
+
+adminPrinteryRoutes.route('/edit/:prntSID', { name: 'admin_printeries_edit_printery',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_single_printery', Meteor.subscribe("admin_single_printery", params.prntSID));
+    }
+  },
+  action() {
+    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminEditPrintery' });
     NProgress.done();
   }
 });
