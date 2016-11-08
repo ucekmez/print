@@ -1,6 +1,46 @@
 /* CSS declarations go here */
 
 
+
+
+/* user input styling  */
+
+.user-inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+#user-inputfile-label,
+.user-inputfile + label {
+    max-width: 80%;
+    font-size: 1.25rem;
+    /* 20px */
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+    /* 10px 20px */
+}
+
+#userFileInput_save:disabled {
+  background-color:rgba(0,0,0,0.5);
+}
+
+
+
+
+/* / user input styling  */
+
+
+
+
+
+
 .at-form {
   margin-top:0 !important;
   padding:0 !important;
@@ -106,15 +146,19 @@ label.error {
 /******** icon sizes ***********/
 
 .small-icon { font-size:10px !important; }
-.normal-icon { font-size:14px !important; }
-.big-icon { font-size:18px !important; }
-.huge-icon { font-size:22px !important; }
-.very-huge-icon { font-size:26px !important; }
+.normal-icon { font-size:16px !important; }
+.big-icon { font-size:22px !important; }
+.huge-icon { font-size:30px !important; }
+.very-huge-icon { font-size:40px !important; }
+.giant-icon { font-size:50px !important; }
+.very-giant-icon { font-size:60px !important; }
 .red-icon { color:red; }
 .green-icon { color:green; }
 .blue-icon { color:blue; }
 .gray-icon { color:#333; }
 .light-gray-icon { color:#ccc; }
+
+
 
 
 /******* toastr message ********/

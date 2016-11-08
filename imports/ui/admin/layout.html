@@ -1,6 +1,20 @@
+<template name="AdminLayout">
+  <div id="page-wrapper">
+    {{#if isInRole 'admin' }}
+      {{> Template.dynamic template=header}}
+      {{> Template.dynamic template=panel}}
+      {{> Template.dynamic template=main}}
+      {{> Template.dynamic template=footer}}
+    {{else}}
+      {{> NotInRolePage }}
+    {{/if}}
+  </div>
+</template>
+
+
 <template name="AdminPanel">
   <div class="panel-top-menu">
-    <div class="12u 12u(small)" style="text-align:center;font-size:1em;">
+    <div class="12u 12u(small) center-aligned" style="font-size:1em;">
       <a href="{{ pathFor 'admin_ads_index' }}" class="button small-button clean-button icon fa-file-text-o">Reklam</a>
       <a href="{{ pathFor 'admin_printeries_index' }}" class="button small-button clean-button icon fa-file-text-o">Matbaa</a>
       <a href="{{ pathFor 'admin_users_index' }}" class="button small-button clean-button icon fa-file-text-o">Kullanıcı</a>

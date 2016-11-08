@@ -12,7 +12,7 @@ const adminRoutes = FlowRouter.group({ prefix: '/manage', name: 'admin'});
 
 adminRoutes.route('/', { name: 'admin_dashboard',
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminFirstPage' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminFirstPage' });
     NProgress.done();
   }
 });
@@ -25,14 +25,14 @@ const adminAdRoutes = adminRoutes.group({ prefix: "/ads", name: "admin_ads"});
 
 adminAdRoutes.route('/', { name: 'admin_ads_index',
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAdsIndex' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAdsIndex' });
     NProgress.done();
   }
 });
 
 adminAdRoutes.route('/new', { name: 'admin_ads_add_new_advertiser',
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewAdvertiser' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewAdvertiser' });
     NProgress.done();
   }
 });
@@ -44,7 +44,7 @@ adminAdRoutes.route('/edit/:advSID', { name: 'admin_ads_edit_advertiser',
     }
   },
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminEditAdvertiser' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminEditAdvertiser' });
     NProgress.done();
   }
 });
@@ -57,7 +57,7 @@ adminAdRoutes.route('/list', { name: 'admin_ads_list_advertisers',
     }
   },
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListAdvertisers' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListAdvertisers' });
     NProgress.done();
   }
 });
@@ -68,14 +68,14 @@ adminAdRoutes.route('/list', { name: 'admin_ads_list_advertisers',
 const adminPrinteryRoutes = adminRoutes.group({ prefix: "/printeries", name: "admin_printeries"});
 adminPrinteryRoutes.route('/', { name: 'admin_printeries_index',
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminPrinteriesIndex' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminPrinteriesIndex' });
     NProgress.done();
   }
 });
 
 adminPrinteryRoutes.route('/new', { name: 'admin_printeries_add_new_printery',
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewPrintery' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewPrintery' });
     NProgress.done();
   }
 });
@@ -87,7 +87,7 @@ adminPrinteryRoutes.route('/edit/:prntSID', { name: 'admin_printeries_edit_print
     }
   },
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminEditPrintery' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminEditPrintery' });
     NProgress.done();
   }
 });
@@ -99,7 +99,7 @@ adminPrinteryRoutes.route('/list', { name: 'admin_printeries_list_printeries',
     }
   },
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListPrinteries' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListPrinteries' });
     NProgress.done();
   }
 });
@@ -110,7 +110,7 @@ adminPrinteryRoutes.route('/list', { name: 'admin_printeries_list_printeries',
 const adminUserRoutes = adminRoutes.group({ prefix: "/users", name: "admin_users"});
 adminUserRoutes.route('/', { name: 'admin_users_index',
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminUsersIndex' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminUsersIndex' });
     NProgress.done();
   }
 });
@@ -122,7 +122,7 @@ adminUserRoutes.route('/list', { name: 'admin_list_users',
     }
   },
   action() {
-    BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListUsers' });
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListUsers' });
     NProgress.done();
   }
 });

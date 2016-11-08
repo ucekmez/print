@@ -1,5 +1,6 @@
 import { Advertisers } from '/imports/api/collections/advertisers.js';
 import { Printeries } from '/imports/api/collections/printeries.js';
+import { Docs, Files } from '/imports/api/collections/docs.js';
 
 
 /******* subs for admin **********/

@@ -1,0 +1,57 @@
+<template name="UserAddNewDoc">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium) center-aligned">
+
+          <!-- Content -->
+            <div id="content">
+                {{#with currentUpload}}
+                  <div style="height:120px;">
+                    <label for="userFileInput" class="cursor:pointer;" id="user-inputfile-label">
+                      <a class="icon fa-upload very-giant-icon"></a><br />
+                      <a style="color:black;text-decoration:none;">Buraya tıklayarak bir dosya seçin</a>
+                    </label>
+                  </div>
+                  <br />
+                  <button type="button" style="margin-top:10px;" id="userFileInput_save" class="button fluid-button clean-button icon fa-hourglass-half" disabled>Yükleniyor... {{ progress.get }}%</button>
+                {{else}}
+                  <div style="height:120px;">
+                    <input type="file" name="userFileInput" id="userFileInput" class="user-inputfile inputfile-4" />
+                    <label for="userFileInput" class="cursor:pointer;">
+                      <a class="icon fa-upload very-giant-icon"></a><br />
+                      <a style="color:black;text-decoration:none;" id="user_click_to_choose">Buraya tıklayarak bir dosya seçin</a>
+                    </label>
+                  </div>
+                  <br />
+                  <button type="button" style="margin-top:10px;" id="userFileInput_save" class="button fluid-button clean-button icon fa-save" disabled>Yüklemeye Başla</button>
+                {{/with}}
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+
+<template name="UserDocHistory">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium)">
+
+          <!-- Content -->
+            <div id="content">
+                Doc History
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

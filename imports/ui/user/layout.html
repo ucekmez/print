@@ -1,0 +1,18 @@
+<template name="UserPanel">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium) center-aligned">
+
+          <!-- Content -->
+            <div id="content" style="padding-top:20px;line-height:2.4em;">
+                <a href="{{ pathFor 'user_add_new_doc' }}" class="button icon fa-file-pdf-o clean-button user-dashboard-icon">Yeni Doküman Yükle</a>
+                <a href="{{ pathFor 'user_doc_history' }}" class="button icon fa-history clean-button user-dashboard-icon">Yazdırma Geçmişi</a>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

@@ -41,9 +41,9 @@
                 {{else}}
                   {{#if isInRole 'user' }}
                     {{#if page 'user_dashboard'}}
-                      <li class="current"><a href="#">Kullanıcı Paneli</a></li>
+                      <li class="current"><a href="{{ pathFor 'user_dashboard' }}">Kullanıcı Paneli</a></li>
                     {{else}}
-                      <li><a href="#">Kullanıcı Paneli</a></li>
+                      <li><a href="{{ pathFor 'user_dashboard' }}">Kullanıcı Paneli</a></li>
                     {{/if}}
                   {{/if}}
                 {{/if}}
@@ -71,7 +71,7 @@
                         <a href="#">Matbaa Paneli</a>
                       {{else}}
                         {{#if isInRole 'user' }}
-                          <a href="#">Kullanıcı Paneli</a>
+                          <a href="{{ pathFor 'user_dashboard' }}">Kullanıcı Paneli</a>
                         {{/if}}
                       {{/if}}
                     {{/if}}
