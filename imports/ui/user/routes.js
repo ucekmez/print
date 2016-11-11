@@ -17,6 +17,11 @@ userRoutes.route('/', { name: 'user_dashboard',
 });
 
 userRoutes.route('/doc/new', { name: 'user_add_new_doc',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('user_list_recent_files', Meteor.subscribe("user_list_recent_files"));
+    }
+  },
   action() {
     BlazeLayout.render('LandingLayout', { header: 'Header', footer: 'Footer', main: 'UserAddNewDoc' });
     NProgress.done();

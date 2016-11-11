@@ -29,6 +29,36 @@
                 {{/with}}
             </div>
 
+
+            {{#if tmpfiles }}
+              <div class="row 200%" style="padding-top:10px;">
+                <div class="12u 12u(medium) important(medium) center-aligned">
+                  <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Dosya Adı</th>
+                      <th>Dosya Boyutu</th>
+                      <th>Sayfa Sayısı</th>
+                      <th>İşlemler</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each tmpfiles }}
+                      <tr class="left-aligned" style="text-decoration:none;">
+                        <th scope="row">{{ index }}</th>
+                            <td><a href="{{fileURL this }}" target="_blank">{{ name }}</a></td>
+                            <td>{{ getFileSize size }}</td>
+                            <td>{{fileURL this }}</td>
+                        <td>[X]</td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+                </div>
+              </div>
+            {{/if}}
+
         </div>
       </div>
     </div>

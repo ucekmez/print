@@ -1,7 +1,10 @@
 // bu dosyada koleksiyonlar ve diger server kisimlari olacak
 
 // collections
-//import '/imports/api/collections/xxx.js';
+import '/imports/api/collections/ads.js';
+import '/imports/api/collections/advertisers.js';
+import '/imports/api/collections/docs.js';
+import '/imports/api/collections/printeries.js';
 
 
 // methods

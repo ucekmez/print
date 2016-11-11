@@ -1,5 +1,6 @@
 import { Advertisers } from '/imports/api/collections/advertisers.js';
 import { Printeries } from '/imports/api/collections/printeries.js';
+import { Ads } from '/imports/api/collections/ads.js';
 
 import './layout.html';
 import './ads.html';
@@ -21,12 +22,56 @@ Template.AdminListAdvertisers.helpers({
   },
 });
 
-Template.AdminEditAdvertiser.helpers({
+Template.AdminShowAdvertiser.helpers({
   advertiser() {
-    return Advertisers.findOne({shortid : FlowRouter.getParam('advSID')});
+    return Advertisers.findOne();
   },
 });
 
+Template.AdminEditAdvertiser.helpers({
+  advertiser() {
+    return Advertisers.findOne();
+  },
+});
+
+
+Template.AdminListAdvertiserAds.helpers({
+  ads() {
+    return Ads.find({}, { sort: { 'meta.createdAt': -1 }})
+      .map(function(document, index) {
+        document.index = index + 1;
+        return document;
+      });
+  },
+  advertiser() {
+    return Advertisers.findOne();
+  },
+});
+
+Template.AdminAddNewAdvertiserAd.onCreated(function () {
+  this.currentUpload = new ReactiveVar(false);
+});
+
+Template.AdminAddNewAdvertiserAd.helpers({
+  currentUpload() {
+    return Template.instance().currentUpload.get();
+  },
+  tmpad() {
+    return Ads.findOne();
+  },
+  url() {
+    return FlowRouter.getParam('advSID');
+  },
+});
+
+Template.AdminAddNewAdvertiserAdContinue.helpers({
+  tmpad() {
+    return Ads.findOne();
+  },
+  SID() {
+    return FlowRouter.getParam('advSID');
+  },
+});
 
 /////////////////////////////////////// printery
 
@@ -159,6 +204,7 @@ Template.AdminEditAdvertiser.events({
           toastr.error(err.reason);
         }else {
           toastr.success('Reklamveren Güncellendi!');
+          FlowRouter.go('admin_ads_show_advertiser', { advSID: FlowRouter.getParam('advSID')});
         }
       });
     }else {
@@ -170,7 +216,92 @@ Template.AdminEditAdvertiser.events({
 });
 
 
-/////////////////////////////////////// printery
+Template.AdminAddNewAdvertiserAd.events({
+  'click #adminFileInput_save'(event, instance) {
+    event.preventDefault();
+    const input = $('.admin-inputfile')[0];
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (file) {
+        const existing = Ads.findOne();
+        if (existing) { Meteor.call('admin_remove_existing_tmpad', existing._id, function(err, data){
+            if (err) { toastr.error(err); }
+          })
+        }
+        const uploadInstance = Ads.insert({
+          file: file,
+          meta: { 'advertiser': FlowRouter.getParam('advSID'), 'tmp': true, createdAt: new Date() },
+          streams: 'dynamic',
+          chunkSize: 'dynamic'
+        }, false);
+
+        uploadInstance.on('start', function() {
+          instance.currentUpload.set(this);
+        });
+
+        uploadInstance.on('end', function(err, fileObj) {
+          if (err) {
+            if (err.reason === "452") {
+              toastr.warning("Yalnızca JPG ve PNG yükleyebilirsiniz.");
+            }else {
+              toastr.warning("Azami dosya boyutu: 20 MByte");
+            }
+          }else {
+            //Meteor.call('user_assign_file_to_doc', fileObj._id, function(err, data) {
+            //  if (err) {
+            //    toastr.error(err);
+            //  }else {
+            //    console.log(data); // debug
+            //    toastr.info("Dosya başarılı bir şekilde yüklendi!");
+            //    $('#user_click_to_choose').html("Buraya tıklayarak bir dosya seçin");
+            //  }
+            //});
+            toastr.info("Dosya başarılı bir şekilde yüklendi!");
+            $('#admin_click_to_choose').html("Buraya tıklayarak bir dosya seçin");
+          }
+          instance.currentUpload.set(false);
+        });
+
+        uploadInstance.start();
+      }
+    }
+  },
+
+  'change #adminFileInput'(event, instance) {
+    const input = $('.admin-inputfile')[0];
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (file) {
+        $('#admin_click_to_choose').html(file.name);
+        $('#adminFileInput_save').prop('disabled',false);
+      }
+    }
+  },
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////
+                                                    ////
+/////////////////////////////////////// printery    ////
+                                                    ////
+////////////////////////////////////////////////////////
 
 Template.AdminAddNewPrintery.events({
   'click #admin_add_new_printery_save'(event, instance) {

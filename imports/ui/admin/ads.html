@@ -71,6 +71,8 @@
   </div>
 </template>
 
+
+
 <template name="AdminEditAdvertiser">
   <div id="main-wrapper">
     <div class="container">
@@ -166,7 +168,106 @@
                       <button type="button" class="button fluid-button clean-button icon fa-save" id="admin_edit_advertiser_save">Kaydet</button>
                     </div>
                     <div class="3u 4u(medium)">
-                      <a href="{{ pathFor 'admin_ads_list_advertisers' }}" class="button fluid-button clean-button alt icon fa-remove">İptal</a>
+                      <a href="{{ pathFor 'admin_ads_show_advertiser' advSID=advertiser.shortid }}" class="button fluid-button clean-button alt icon fa-remove">İptal</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="AdminShowAdvertiser">
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium)">
+          <!-- Content -->
+            <div id="content">
+
+
+              <div class="row">
+                <div class="6u 6u(medium)">
+                  <h2>{{ advertiser.name }}</h2>
+                </div>
+                <div class="6u 6u(medium) right-aligned">
+                  <a href="{{ pathFor 'admin_ads_list_advertiser_ads' advSID=advertiser.shortid }}" class="button alt clean-button icon fa-image">Reklamlar</a>
+                </div>
+              </div>
+
+
+              <form class="show-content">
+                <div class="form-group row">
+                  <div class="12u 12u(medium) right-aligned gray-colored">
+                    Son güncelleme: {{#if advertiser.updatedAt}}{{ dateFromNow advertiser.updatedAt }}{{else}}{{ dateFromNow advertiser.createdAt }}{{/if}}
+                  </div>
+                </div>
+
+                <div class="form-group row" style="line-height:1.2em;">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label">Ticari Ünvan</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    {{ advertiser.commercial_name }}
+                  </div>
+                </div>
+
+                <div class="form-group row" style="line-height:1.2em;">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label">Adres</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    {{ advertiser.address }}
+                  </div>
+                </div>
+
+                <div class="form-group row" style="line-height:1.2em;">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label">Telefon</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    {{ advertiser.phone }}
+                  </div>
+                </div>
+
+                <div class="form-group row" style="line-height:1.2em;">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label">Yetkili Kişi</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    {{ advertiser.authorized }}
+                  </div>
+                </div>
+
+                <div class="form-group row" style="line-height:1.2em;">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label">Yetkili Telefon</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    {{ advertiser.authorized_phone }}
+                  </div>
+                </div>
+
+                <div class="form-group row" style="line-height:1.2em;">
+                  <div class="3u 3u(medium) left-aligned">
+                    <label class="form-control-label">Firma E-Posta</label>
+                  </div>
+                  <div class="9u 9u(medium)">
+                    {{ advertiser.email }}
+                  </div>
+                </div>
+
+
+                <div class="form-actions">
+                  <div class="form-group row">
+                    <div class="9u 8u(medium)">
+                      <a type="button" class="button fluid-button clean-button icon fa-save" href="{{ pathFor 'admin_ads_edit_advertiser' advSID=advertiser.shortid }}">Düzenle</a>
+                    </div>
+                    <div class="3u 4u(medium)">
+                      <a href="{{ pathFor 'admin_ads_list_advertisers' }}" class="button fluid-button clean-button alt icon fa-remove">Listeye Dön</a>
                     </div>
                   </div>
                 </div>
@@ -206,7 +307,7 @@
                         {{#each advertisers }}
                           <tr>
                             <td>{{ index }}</td>
-                            <td><a href="{{ pathFor 'admin_ads_edit_advertiser' advSID=shortid }}" style="font-size:1.1em;"> {{ name }}</a></td>
+                            <td><a href="{{ pathFor 'admin_ads_show_advertiser' advSID=shortid }}" style="font-size:1.1em;"> {{ name }}</a></td>
                             <td>{{ email }}</td>
                             <td>...</td>
                           </tr>
@@ -226,6 +327,135 @@
                 İçerik yükleniyor...
               {{/if}}
             </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+<template name="AdminListAdvertiserAds">
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium)">
+          <!-- Content -->
+            <div id="content">
+
+
+
+              <div class="row">
+                <div class="6u 6u(medium)">
+                  <h2>{{ advertiser.name }} için reklamlar</h2>
+                </div>
+                <div class="6u 6u(medium) right-aligned">
+                  <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad' advSID=advertiser.shortid }}" class="button alt clean-button icon fa-plus">Yeni Reklam</a>
+                </div>
+              </div>
+
+              {{#if subsReady 'admin_list_ads_for_advertiser'}}
+                {{#if ads }}
+                  <div class="margin-bottom-50">
+                    {{#each ads }}
+                      <div class="row" style="border-bottom: 1px solid #eee;">
+                        <div class="8u 8u(medium) 12u(small) left-aligned">
+                          <img src="{{fileURL this }}" width="100%" style="max-width:672px;"/>
+                        </div>
+                        <div class="4u 4u(medium) 12u(small) left-aligned">
+                          Deneme
+                        </div>
+                      </div>
+                    {{/each}}
+                  </div>
+                {{else}}
+                  Henüz reklam eklenmemiş...
+                {{/if}}
+              {{else}}
+                İçerik yükleniyor...
+              {{/if}}
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<template name="AdminAddNewAdvertiserAd">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium) center-aligned">
+
+          <!-- Content -->
+            <div id="content">
+                {{#with currentUpload}}
+                  <div style="height:120px;">
+                    <label for="adminFileInput" class="cursor:pointer;" id="admin-inputfile-label">
+                      <a class="icon fa-upload very-giant-icon"></a><br />
+                      <a style="color:black;text-decoration:none;">Buraya tıklayarak bir reklam seçin</a>
+                    </label>
+                  </div>
+                  <br />
+                  <button type="button" style="margin-top:10px;" id="adminFileInput_save" class="button fluid-button clean-button icon fa-hourglass-half" disabled>Yükleniyor... {{ progress.get }}%</button>
+                {{else}}
+                  <div style="height:120px;">
+                    <input type="file" name="adminFileInput" id="adminFileInput" class="admin-inputfile inputfile-4" />
+                    <label for="adminFileInput" class="cursor:pointer;">
+                      <a class="icon fa-upload very-giant-icon"></a><br />
+                      <a style="color:black;text-decoration:none;" id="admin_click_to_choose">Buraya tıklayarak bir reklam seçin</a>
+                    </label>
+                  </div>
+                  <br />
+                  <button type="button" style="margin-top:10px;" id="adminFileInput_save" class="button fluid-button clean-button icon fa-save" disabled>Yüklemeye Başla</button>
+                {{/with}}
+            </div>
+        </div>
+      </div>
+
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium) center-aligned">
+          {{#if tmpad }}
+            <div class="row 200%">
+              <div class="12u 12u(medium) important(medium) center-aligned">
+                <img src="{{ tmpad.link }}" /><br />
+                <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad_continue' advSID=SID }}" style="margin-top:10px;" class="button fluid-button clean-button icon fa-check">Reklamı seç ve devam et</a>
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+
+<template name="AdminAddNewAdvertiserAdContinue">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium) center-aligned">
+          {{#if tmpad }}
+            <div class="row 200%">
+              <div class="12u 12u(medium) important(medium) center-aligned">
+                <img src="{{ tmpad.link }}" /><br />
+
+
+                Anahtar Kelimeler: <br />
+                Gösterim sayısı: <br />
+                Cinsiyet: <br />
+                Yaş: <br />
+
+
+                <a type="button" style="margin-top:10px;" class="button fluid-button clean-button icon fa-check">Reklamı seç ve devam et</a>
+              </div>
+            </div>
+          {{/if}}
         </div>
       </div>
     </div>

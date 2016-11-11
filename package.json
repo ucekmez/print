@@ -5,8 +5,9 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "PDFtools": "^1.0.0",
+    "babel-runtime": "^6.18.0",
     "bcrypt": "^0.8.7",
+    "fili1": "^1.0.0",
     "meteor-node-stubs": "^0.2.3",
     "shortid": "^2.2.6"
   }

@@ -3,10 +3,12 @@ import { FilesCollection } from 'meteor/ostrio:files';
 
 import shortid from 'shortid';
 
+
 Docs.attachSchema(new SimpleSchema({
   user             : { type: String, optional: true },
-  name             : { type: String, optional: true },
   file             : { type: String, optional: true },
+  name             : { type: String, optional: true },
+  keywords         : { type: [String], optional: true },
 
   shortid : {
     type: String,
@@ -52,6 +54,13 @@ Docs.allow({
 export const Files = new FilesCollection({
   collectionName: 'Files',
   allowClientCode: false,
+  storagePath: function () {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    return '/Users/ugur/Desktop/FILISRC/print/data/files/'+year+'/'+month;
+  },
   onBeforeUpload: function(file) {
     // if file size < 10x2 Mbyte and file extension is pdf
     if (file.size <= 10485760*5) {

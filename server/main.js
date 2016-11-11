@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import '/imports/startup/server';
 
-
 import shortid from 'shortid';
+
 
 /**********************************************
       init the admin user

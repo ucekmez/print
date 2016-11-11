@@ -37,6 +37,18 @@ adminAdRoutes.route('/new', { name: 'admin_ads_add_new_advertiser',
   }
 });
 
+adminAdRoutes.route('/show/:advSID', { name: 'admin_ads_show_advertiser',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_single_advertiser', Meteor.subscribe("admin_single_advertiser", params.advSID));
+    }
+  },
+  action() {
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminShowAdvertiser' });
+    NProgress.done();
+  }
+});
+
 adminAdRoutes.route('/edit/:advSID', { name: 'admin_ads_edit_advertiser',
   subscriptions: function(params, queryParams) {
     if(Meteor.isClient) {
@@ -61,6 +73,46 @@ adminAdRoutes.route('/list', { name: 'admin_ads_list_advertisers',
     NProgress.done();
   }
 });
+
+adminAdRoutes.route('/:advSID/ads', { name: 'admin_ads_list_advertiser_ads',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_list_ads_for_advertiser', Meteor.subscribe("admin_list_ads_for_advertiser", params.advSID));
+      this.register('admin_single_advertiser_name', Meteor.subscribe("admin_single_advertiser_name", params.advSID));
+    }
+  },
+  action() {
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListAdvertiserAds' });
+    NProgress.done();
+  }
+});
+
+adminAdRoutes.route('/:advSID/new', { name: 'admin_ads_add_new_advertiser_ad',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_recenty_added_advertiser_ad', Meteor.subscribe("admin_recenty_added_advertiser_ad", params.advSID));
+    }
+  },
+  action() {
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewAdvertiserAd' });
+    NProgress.done();
+  }
+});
+
+adminAdRoutes.route('/:advSID/new/continue', { name: 'admin_ads_add_new_advertiser_ad_continue',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_recenty_added_advertiser_ad', Meteor.subscribe("admin_recenty_added_advertiser_ad", params.advSID));
+    }
+  },
+  action() {
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewAdvertiserAdContinue' });
+    NProgress.done();
+  }
+});
+
+
+
 
 ///////////////////////////////////////////// adminPrinteryRoutes
 

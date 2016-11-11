@@ -16,6 +16,13 @@ Template.UserAddNewDoc.helpers({
   currentUpload() {
     return Template.instance().currentUpload.get();
   },
+  tmpfiles() {
+    return Files.find({}, {sort: { 'meta.createdAt': -1}})
+      .map(function(document, index) {
+        document.index = index + 1;
+        return document;
+      });
+  }
 });
 
 
@@ -34,6 +41,7 @@ Template.UserAddNewDoc.events({
       if (file) {
         const uploadInstance = Files.insert({
           file: file,
+          meta: { 'user': Meteor.userId(), 'tmp': true, createdAt: new Date() },
           streams: 'dynamic',
           chunkSize: 'dynamic'
         }, false);
@@ -50,15 +58,15 @@ Template.UserAddNewDoc.events({
               toastr.warning("Azami dosya boyutu: 50 MByte");
             }
           }else {
-            /*Meteor.call('user_assign_file', function(err, data) {
+            Meteor.call('user_assign_file_to_doc', fileObj._id, function(err, data) {
               if (err) {
                 toastr.error(err);
               }else {
+                console.log(data); // debug
                 toastr.info("Dosya başarılı bir şekilde yüklendi!");
+                $('#user_click_to_choose').html("Buraya tıklayarak bir dosya seçin");
               }
-            });*/
-            toastr.info("Dosya başarılı bir şekilde yüklendi!");
-            $('#user_click_to_choose').html("Buraya tıklayarak bir dosya seçin");
+            });
           }
           instance.currentUpload.set(false);
         });
@@ -80,3 +88,19 @@ Template.UserAddNewDoc.events({
   },
 
 });
+
+
+
+
+
+///////////////// helpers
+
+
+Template.registerHelper("getFileSize", function(size){
+  const i = Math.floor( Math.log(size) / Math.log(1024) );
+  return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+});
+
+
+
+//
