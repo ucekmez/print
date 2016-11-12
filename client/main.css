@@ -1,6 +1,16 @@
 /* CSS declarations go here */
 
 
+.bootstrap-tagsinput {
+  display: block !important;
+  text-align:left;
+  padding: 0px 0px 4px 10px !important;
+}
+
+.bootstrap-tagsinput {
+  padding: 0px 0px 0px 5px !important;
+  font-size:13px !important;
+}
 
 
 /* user input styling  */
@@ -117,7 +127,8 @@
 }
 
 
-#tooltip .printery_address_tooltip {
+#tooltip .printery_address_tooltip
+ {
   visibility: hidden;
   width: 300px;
   background-color: rgba(0,0,0,0.5);
@@ -130,7 +141,23 @@
   z-index: 1;
 }
 
-#tooltip:hover .printery_address_tooltip {
+#tooltip .ad_image_tooltip
+ {
+  visibility: hidden;
+  width: 300px;
+  margin-left:-200px;
+  background-color: rgba(0,0,0,0.9);
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  line-height: normal;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+#tooltip:hover .printery_address_tooltip,
+#tooltip:hover .ad_image_tooltip{
   visibility: visible;
 }
 

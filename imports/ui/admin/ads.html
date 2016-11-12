@@ -267,7 +267,7 @@
                       <a type="button" class="button fluid-button clean-button icon fa-save" href="{{ pathFor 'admin_ads_edit_advertiser' advSID=advertiser.shortid }}">Düzenle</a>
                     </div>
                     <div class="3u 4u(medium)">
-                      <a href="{{ pathFor 'admin_ads_list_advertisers' }}" class="button fluid-button clean-button alt icon fa-remove">Listeye Dön</a>
+                      <a href="{{ pathFor 'admin_ads_list_advertisers' }}" class="button fluid-button clean-button alt icon fa-undo">Listeye Dön</a>
                     </div>
                   </div>
                 </div>
@@ -350,7 +350,7 @@
                   <h2>{{ advertiser.name }} için reklamlar</h2>
                 </div>
                 <div class="6u 6u(medium) right-aligned">
-                  <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad' advSID=advertiser.shortid }}" class="button alt clean-button icon fa-plus">Yeni Reklam</a>
+                  <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad' advSID=advertiser.shortid }}" class="button alt clean-button icon fa-plus" style="z-index:999;">Yeni Reklam</a>
                 </div>
               </div>
 
@@ -358,14 +358,38 @@
                 {{#if ads }}
                   <div class="margin-bottom-50">
                     {{#each ads }}
-                      <div class="row" style="border-bottom: 1px solid #eee;">
-                        <div class="8u 8u(medium) 12u(small) left-aligned">
-                          <img src="{{fileURL this }}" width="100%" style="max-width:672px;"/>
+                      {{#if meta.tmp }}
+                      <div class="row" style="border-bottom: 1px solid #eee;opacity: 0.3;filter: alpha(opacity=30);">
+                        <div class="6u 6u(medium) 12u(small) left-aligned" id="tooltip">
+                          <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad' advSID=meta.advertiser }}">
+                            <img src="{{fileURL this }}" width="100%" style="max-width:672px;border:1px dashed #ddd;padding:10px;border-radius:6px;"/>
+                            <span class="ad_image_tooltip">Düzenlemek için tıklayın</span>
+                          </a>
                         </div>
-                        <div class="4u 4u(medium) 12u(small) left-aligned">
-                          Deneme
+                        <div class="6u 6u(medium) 12u(small) left-aligned">
+                          Henüz reklam bilgisi girilmemiş
                         </div>
                       </div>
+                      {{else}}
+                      <div class="row" style="padding-bottom:10px;border-bottom: 1px solid #eee;">
+                        <div class="6u 6u(medium) 12u(small) left-aligned" id="tooltip">
+                          <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad_continue_edit' FID=_id }}">
+                            <img src="{{fileURL this }}" width="100%" style="max-width:672px;border:1px dashed #ddd;padding:10px;border-radius:6px;"/>
+                            <span class="ad_image_tooltip">Düzenlemek için tıklayın</span>
+                          </a>
+                        </div>
+                        <div class="2u 2u(medium) 6u(small) right-aligned" style="line-height:1.2em;margin-top:10px;">
+                          <strong>Gösterim: </strong><br />
+                          <strong>Cinsiyet: </strong><br />
+                          <strong>Yaş Aralığı: </strong><br />
+                        </div>
+                        <div class="3u 3u(medium) 6u(small) left-aligned" style="line-height:1.2em;margin-top:10px;">
+                          {{ meta.showcount }}<br />
+                          {{ sexToString meta.sex }}<br />
+                          {{ meta.age_min }} - {{ meta.age_max }}<br />
+                       </div>
+                      </div>
+                      {{/if}}
                     {{/each}}
                   </div>
                 {{else}}
@@ -415,13 +439,20 @@
         </div>
       </div>
 
-      <div class="row 200%">
+      <div class="row">
         <div class="12u 12u(medium) important(medium) center-aligned">
           {{#if tmpad }}
             <div class="row 200%">
               <div class="12u 12u(medium) important(medium) center-aligned">
-                <img src="{{ tmpad.link }}" /><br />
-                <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad_continue' advSID=SID }}" style="margin-top:10px;" class="button fluid-button clean-button icon fa-check">Reklamı seç ve devam et</a>
+                <img src="{{ tmpad.link }}" width="100%" style="max-width:672px;border:1px dashed #ddd;padding:10px;border-radius:6px;"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="9u 8u(medium)">
+                <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad_continue' advSID=SID }}" class="button fluid-button clean-button icon fa-check">Reklamı seç ve devam et</a>
+              </div>
+              <div class="3u 4u(medium)">
+                <a href="{{ pathFor 'admin_ads_list_advertiser_ads' advSID=SID }}" class="button fluid-button clean-button alt icon fa-undo">Geri</a>
               </div>
             </div>
           {{/if}}
@@ -443,18 +474,166 @@
           {{#if tmpad }}
             <div class="row 200%">
               <div class="12u 12u(medium) important(medium) center-aligned">
-                <img src="{{ tmpad.link }}" /><br />
+                <div class="row">
+                  <div class="12u 12u(medium) center-aligned">
+                    <img src="{{ tmpad.link }}" width="100%" style="max-width:672px;border:1px dashed #ddd;padding:10px;border-radius:6px;" /><br />
+                  </div>
+                </div>
 
 
-                Anahtar Kelimeler: <br />
-                Gösterim sayısı: <br />
-                Cinsiyet: <br />
-                Yaş: <br />
+                <form id="admin-add-new-advertiser-ad-continue-form">
+                  <div class="form-group row" style="margin-top:10px;">
+                    <div class="3u 3u(medium) left-aligned">
+                      <label class="form-control-label" for="add_new_advertiser_ad_keywords">Anahtar Kelimeler</label>
+                    </div>
+                    <div class="9u 9u(medium)">
+                      <input type="text" class="form-control" data-role="tagsinput" placeholder="Anahtar Kelimeler"  id="add_new_advertiser_ad_keywords" name="add_new_advertiser_ad_keywords">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="3u 3u(medium) left-aligned">
+                      <label class="form-control-label" for="add_new_advertiser_ad_showcount">Gösterim Sayısı</label>
+                    </div>
+                    <div class="9u 9u(medium)">
+                      <input type="text" class="form-control required" placeholder="Gösterim Sayısı"  id="add_new_advertiser_ad_showcount" name="add_new_advertiser_ad_showcount" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="3u 3u(medium) left-aligned">
+                      <label class="form-control-label" for="add_new_advertiser_ad_sex">Cinsiyet</label>
+                    </div>
+                    <div class="9u 9u(medium)">
+                      <div class="form-group">
+                          <select class="form-control" id="add_new_advertiser_ad_sex" name="add_new_advertiser_ad_sex">
+                            <option value="1">Hepsi</option>
+                            <option value="2">Erkek</option>
+                            <option value="3">Kadın</option>
+                          </select>
+                      </div>
+                    </div>
+                  </div>
 
 
-                <a type="button" style="margin-top:10px;" class="button fluid-button clean-button icon fa-check">Reklamı seç ve devam et</a>
+
+                  <div class="form-group row">
+                    <div class="3u 3u(medium) left-aligned">
+                      <label class="form-control-label" for="add_new_advertiser_ad_age_min">Hedef Yaş Aralığı</label>
+                    </div>
+                    <div class="4u 4u(medium)">
+                      <input type="text" class="form-control required" placeholder="Minimum"  id="add_new_advertiser_ad_age_min" name="add_new_advertiser_ad_age_min" required>
+                    </div>
+                    <div class="1u 1u(medium)">ile</div>
+                    <div class="4u 4u(medium)">
+                      <input type="text" class="form-control required" placeholder="Maksimum"  id="add_new_advertiser_ad_age_max" name="add_new_advertiser_ad_age_max" required>
+                    </div>
+
+                  </div>
+
+                  <div class="form-actions">
+                    <div class="form-group row">
+                      <div class="9u 8u(medium)">
+                        <button type="button" class="button fluid-button clean-button icon fa-save" id="admin_add_new_advertiser_ad_save">Kaydet</button>
+                      </div>
+                      <div class="3u 4u(medium)">
+                        <a href="{{ pathFor 'admin_ads_add_new_advertiser_ad' advSID=SID }}" class="button fluid-button clean-button alt icon fa-undo">Geri</a>
+                      </div>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
+            <script type="text/javascript">$('#add_new_advertiser_ad_keywords').tagsinput();</script>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="AdminAddNewAdvertiserAdContinueEdit">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium) center-aligned">
+          {{#if ad }}
+            <div class="row 200%">
+              <div class="12u 12u(medium) important(medium) center-aligned">
+                <div class="row">
+                  <div class="12u 12u(medium) center-aligned">
+                    <img src="{{ ad.link }}" width="100%" style="max-width:672px;border:1px dashed #ddd;padding:10px;border-radius:6px;" /><br />
+                  </div>
+                </div>
+
+
+                <form id="admin-add-new-advertiser-ad-continue-edit-form">
+                  <div class="form-group row" style="margin-top:10px;">
+                    <div class="3u 3u(medium) left-aligned">
+                      <label class="form-control-label" for="add_new_advertiser_ad_keywords_edit">Anahtar Kelimeler</label>
+                    </div>
+                    <div class="9u 9u(medium)">
+                      <input type="text" class="form-control" data-role="tagsinput" placeholder="Anahtar Kelimeler" value="{{ ad.meta.keywords }}" id="add_new_advertiser_ad_keywords_edit" name="add_new_advertiser_ad_keywords_edit">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="3u 3u(medium) left-aligned">
+                      <label class="form-control-label" for="add_new_advertiser_ad_showcount_edit">Gösterim Sayısı</label>
+                    </div>
+                    <div class="9u 9u(medium)">
+                      <input type="text" class="form-control required" placeholder="Gösterim Sayısı" value="{{ ad.meta.showcount }}" id="add_new_advertiser_ad_showcount_edit" name="add_new_advertiser_ad_showcount_edit" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="3u 3u(medium) left-aligned">
+                      <label class="form-control-label" for="add_new_advertiser_ad_sex_edit">Cinsiyet</label>
+                    </div>
+                    <div class="9u 9u(medium)">
+                      <div class="form-group">
+                          <select class="form-control" id="add_new_advertiser_ad_sex_edit" name="add_new_advertiser_ad_sex_edit">
+                            {{#if equals ad.meta.sex "1" }}<option value="1" selected="selected">Hepsi</option>{{else}}<option value="1">Hepsi</option>{{/if}}
+                            {{#if equals ad.meta.sex "2" }}<option value="2" selected="selected">Erkek</option>{{else}}<option value="2">Erkek</option>{{/if}}
+                            {{#if equals ad.meta.sex "3" }}<option value="3" selected="selected">Kadın</option>{{else}}<option value="3">Kadın</option>{{/if}}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  <div class="form-group row">
+                    <div class="3u 3u(medium) left-aligned">
+                      <label class="form-control-label" for="add_new_advertiser_ad_age_min_edit">Hedef Yaş Aralığı</label>
+                    </div>
+                    <div class="4u 4u(medium)">
+                      <input type="text" class="form-control required" placeholder="Minimum" value="{{ ad.meta.age_min }}" id="add_new_advertiser_ad_age_min_edit" name="add_new_advertiser_ad_age_min_edit" required>
+                    </div>
+                    <div class="1u 1u(medium)">ile</div>
+                    <div class="4u 4u(medium)">
+                      <input type="text" class="form-control required" placeholder="Maksimum" value="{{ ad.meta.age_max }}" id="add_new_advertiser_ad_age_max_edit" name="add_new_advertiser_ad_age_max_edit" required>
+                    </div>
+
+                  </div>
+
+                  <div class="form-actions">
+                    <div class="form-group row">
+                      <div class="9u 8u(medium)">
+                        <button type="button" class="button fluid-button clean-button icon fa-save" id="admin_add_new_advertiser_ad_edit_save">Kaydet</button>
+                      </div>
+                      <div class="3u 4u(medium)">
+                        <a href="{{ pathFor 'admin_ads_list_advertiser_ads' advSID=ad.meta.advertiser }}" class="button fluid-button clean-button alt icon fa-undo">Geri</a>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            {{#if subsReady 'admin_single_advertiser_ad'}}
+              <script type="text/javascript">$('#add_new_advertiser_ad_keywords_edit').tagsinput();</script>
+            {{/if}}
           {{/if}}
         </div>
       </div>

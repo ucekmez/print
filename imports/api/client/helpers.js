@@ -12,3 +12,9 @@ Template.registerHelper('equals', function(s1, s2){
 Template.registerHelper('page', function(s1){
   return FlowRouter.getRouteName() == s1;
 });
+
+Template.registerHelper('sexToString', function(s){
+  if (s === '1') { return "Erkek-Kadın"; }
+  if (s === '2') { return "Erkek"; }
+  if (s === '3') { return "Kadın"; }
+});

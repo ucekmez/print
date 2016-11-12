@@ -111,6 +111,18 @@ adminAdRoutes.route('/:advSID/new/continue', { name: 'admin_ads_add_new_advertis
   }
 });
 
+adminAdRoutes.route('/:FID/edit', { name: 'admin_ads_add_new_advertiser_ad_continue_edit',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_single_advertiser_ad', Meteor.subscribe("admin_single_advertiser_ad", params.FID));
+    }
+  },
+  action() {
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewAdvertiserAdContinueEdit' });
+    NProgress.done();
+  }
+});
+
 
 
 

@@ -10,9 +10,11 @@ Meteor.methods({
       if (type == 'advertiser') {
         Roles.addUsersToRoles(user_id, ['advertiser']);
         const company_id = Advertisers.insert({ name: companyname, user: user_id, email: email});
+        return Advertisers.findOne(company_id).shortid;
       }else if (type == 'printery') {
         Roles.addUsersToRoles(user_id, ['printery']);
         const company_id = Printeries.insert({ name: companyname, user: user_id, email: email, });
+        return Printeries.findOne(Printeries).shortid;
       }else {
         return "error";
       }
@@ -79,6 +81,21 @@ Meteor.methods({
 
   admin_remove_existing_tmpad(aid) {
     Ads.remove(aid);
+  },
+
+  admin_advertiser_ad_make_resident(ad_id, keywords, showcount, sex, age_min, age_max) {
+    const ad = Ads.findOne(ad_id);
+    if (ad) {
+      Ads.update({ _id: ad_id }, {
+        $set: {
+          'meta.tmp': false,
+          'meta.keywords': keywords,
+          'meta.showcount': showcount,
+          'meta.sex': sex,
+          'meta.age_min': age_min,
+          'meta.age_max': age_max
+      }});
+    }
   },
 
 

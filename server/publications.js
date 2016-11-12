@@ -39,6 +39,17 @@ Meteor.publish("admin_recenty_added_advertiser_ad", function(advSID) {
   }
 });
 
+Meteor.publish("admin_single_advertiser_ad", function(FID) {
+  if (Roles.userIsInRole(this.userId, ['admin'])) {
+    return Ads.find(FID).cursor;
+  }
+});
+
+
+
+
+
+
 
 
             /*     printery */

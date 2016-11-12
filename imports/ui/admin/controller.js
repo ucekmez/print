@@ -2,6 +2,7 @@ import { Advertisers } from '/imports/api/collections/advertisers.js';
 import { Printeries } from '/imports/api/collections/printeries.js';
 import { Ads } from '/imports/api/collections/ads.js';
 
+
 import './layout.html';
 import './ads.html';
 import './printeries.html';
@@ -59,13 +60,22 @@ Template.AdminAddNewAdvertiserAd.helpers({
   tmpad() {
     return Ads.findOne();
   },
-  url() {
+  SID() {
     return FlowRouter.getParam('advSID');
   },
 });
 
 Template.AdminAddNewAdvertiserAdContinue.helpers({
   tmpad() {
+    return Ads.findOne();
+  },
+  SID() {
+    return FlowRouter.getParam('advSID');
+  },
+});
+
+Template.AdminAddNewAdvertiserAdContinueEdit.helpers({
+  ad() {
     return Ads.findOne();
   },
   SID() {
@@ -149,6 +159,7 @@ Template.AdminAddNewAdvertiser.events({
         if (err) {
           toastr.error(err.reason);
         }else {
+          FlowRouter.go('admin_ads_edit_advertiser', { advSID: data});
           toastr.success('Yeni Reklamveren Eklendi!');
         }
       });
@@ -247,15 +258,6 @@ Template.AdminAddNewAdvertiserAd.events({
               toastr.warning("Azami dosya boyutu: 20 MByte");
             }
           }else {
-            //Meteor.call('user_assign_file_to_doc', fileObj._id, function(err, data) {
-            //  if (err) {
-            //    toastr.error(err);
-            //  }else {
-            //    console.log(data); // debug
-            //    toastr.info("Dosya başarılı bir şekilde yüklendi!");
-            //    $('#user_click_to_choose').html("Buraya tıklayarak bir dosya seçin");
-            //  }
-            //});
             toastr.info("Dosya başarılı bir şekilde yüklendi!");
             $('#admin_click_to_choose').html("Buraya tıklayarak bir dosya seçin");
           }
@@ -281,7 +283,97 @@ Template.AdminAddNewAdvertiserAd.events({
 });
 
 
+Template.AdminAddNewAdvertiserAdContinue.events({
+  'click #admin_add_new_advertiser_ad_save'(event, instance) {
+    $("#admin-add-new-advertiser-ad-continue-form").validate({
+      rules: {
+        add_new_advertiser_ad_showcount    : { required: true, number: true, range: [0,10000]},
+        add_new_advertiser_ad_sex          : { required: true, },
+        add_new_advertiser_ad_age_min      : { required: true, number: true, range: [0,80]},
+        add_new_advertiser_ad_age_max      : { required: true, number: true, range: [1,100]},
+      },
+      messages: {
+        add_new_advertiser_ad_showcount  : { required: "Bu alan boş bırakılamaz.", number: "Sayı girmelisiniz!", range: "Geçerli bir sayı girmelisiniz!"},
+        add_new_advertiser_ad_sex        : { required: "Bu alan boş bırakılamaz.", },
+        add_new_advertiser_ad_age_min    : { required: "Bu alan boş bırakılamaz.", number: "Sayı girmelisiniz!", range: "Geçerli bir sayı girmelisiniz!"},
+        add_new_advertiser_ad_age_max    : { required: "Bu alan boş bırakılamaz.", number: "Sayı girmelisiniz!", range: "Geçerli bir sayı girmelisiniz!"},
+      }
+    });
 
+    if ($("#admin-add-new-advertiser-ad-continue-form").valid()) {
+      const keywords  = $('#add_new_advertiser_ad_keywords').tagsinput('items');
+      const showcount = $('#add_new_advertiser_ad_showcount').val();
+      const sex       = $('#add_new_advertiser_ad_sex').val();
+      const age_min   = $('#add_new_advertiser_ad_age_min').val();
+      const age_max   = $('#add_new_advertiser_ad_age_max').val();
+      const tmpad     = Ads.findOne();
+
+      if (age_min > age_max) { toastr.warning("Yaş aralıklarını düzeltiniz!"); }
+      else {
+        if (tmpad) {
+          Meteor.call('admin_advertiser_ad_make_resident', tmpad._id, keywords, showcount, sex, age_min, age_max, function (err, data) {
+            if (err) {
+              toastr.error(err.reason);
+            }else {
+              toastr.success('Reklam Eklendi!');
+              FlowRouter.go('admin_ads_list_advertiser_ads', { advSID: FlowRouter.getParam('advSID')});
+            }
+          });
+        }
+      }
+    }else {
+      toastr.warning("Lütfen tüm alanları doldurun.");
+    }
+
+
+  }
+});
+
+Template.AdminAddNewAdvertiserAdContinueEdit.events({
+  'click #admin_add_new_advertiser_ad_edit_save'(event, instance) {
+    $("#admin-add-new-advertiser-ad-continue-edit-form").validate({
+      rules: {
+        add_new_advertiser_ad_showcount_edit    : { required: true, number: true, range: [0,10000]},
+        add_new_advertiser_ad_sex_edit          : { required: true, },
+        add_new_advertiser_ad_age_min_edit      : { required: true, number: true, range: [0,80]},
+        add_new_advertiser_ad_age_max_edit      : { required: true, number: true, range: [1,100]},
+      },
+      messages: {
+        add_new_advertiser_ad_showcount_edit  : { required: "Bu alan boş bırakılamaz.", number: "Sayı girmelisiniz!", range: "Geçerli bir sayı girmelisiniz!"},
+        add_new_advertiser_ad_sex_edit        : { required: "Bu alan boş bırakılamaz.", },
+        add_new_advertiser_ad_age_min_edit    : { required: "Bu alan boş bırakılamaz.", number: "Sayı girmelisiniz!", range: "Geçerli bir sayı girmelisiniz!"},
+        add_new_advertiser_ad_age_max_edit    : { required: "Bu alan boş bırakılamaz.", number: "Sayı girmelisiniz!", range: "Geçerli bir sayı girmelisiniz!"},
+      }
+    });
+
+    if ($("#admin-add-new-advertiser-ad-continue-edit-form").valid()) {
+      const keywords  = $('#add_new_advertiser_ad_keywords_edit').tagsinput('items');
+      const showcount = $('#add_new_advertiser_ad_showcount_edit').val();
+      const sex       = $('#add_new_advertiser_ad_sex_edit').val();
+      const age_min   = $('#add_new_advertiser_ad_age_min_edit').val();
+      const age_max   = $('#add_new_advertiser_ad_age_max_edit').val();
+      const ad     = Ads.findOne();
+
+      if (age_min > age_max) { toastr.warning("Yaş aralıklarını düzeltiniz!"); }
+      else {
+        if (ad) {
+          Meteor.call('admin_advertiser_ad_make_resident', ad._id, keywords, showcount, sex, age_min, age_max, function (err, data) {
+            if (err) {
+              toastr.error(err.reason);
+            }else {
+              toastr.success('Reklam Güncellendi!');
+              FlowRouter.go('admin_ads_list_advertiser_ads', { advSID: ad.meta.advertiser});
+            }
+          });
+        }
+      }
+    }else {
+      toastr.warning("Lütfen tüm alanları doldurun.");
+    }
+
+
+  }
+});
 
 
 
