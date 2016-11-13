@@ -49,12 +49,25 @@
                         <th scope="row">{{ index }}</th>
                             <td><a href="{{fileURL this }}" target="_blank">{{ name }}</a></td>
                             <td>{{ getFileSize size }}</td>
-                            <td>{{fileURL this }}</td>
-                        <td>[X]</td>
+                            <td>XX Sayfa</td>
+                        <td>
+                          <label id="tooltip">
+                            <a class="icon fa-trash-o red-icon big-icon" id="user_delete_recently_added_file"  style="cursor:pointer;"></a>
+                            <span class="options_tooltip">Silmek için tıklayın</span>
+                          </label>
+                        </td>
                       </tr>
                     {{/each}}
                   </tbody>
                 </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="9u 8u(medium)">
+                  <a href="#" class="button fluid-button clean-button icon fa-check">Devam et</a>
+                </div>
+                <div class="3u 4u(medium)">
+                  <a href="#" class="button fluid-button clean-button alt icon fa-remove">İptal</a>
                 </div>
               </div>
             {{/if}}

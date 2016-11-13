@@ -14,7 +14,7 @@ Meteor.methods({
       }else if (type == 'printery') {
         Roles.addUsersToRoles(user_id, ['printery']);
         const company_id = Printeries.insert({ name: companyname, user: user_id, email: email, });
-        return Printeries.findOne(Printeries).shortid;
+        return Printeries.findOne(company_id).shortid;
       }else {
         return "error";
       }

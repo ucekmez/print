@@ -127,6 +127,10 @@
 }
 
 
+#tooltip {
+  position:relative;
+}
+
 #tooltip .printery_address_tooltip
  {
   visibility: hidden;
@@ -156,8 +160,25 @@
   z-index: 1;
 }
 
+#tooltip .options_tooltip {
+  visibility: hidden;
+  max-width: 300px;
+  top:-5px;
+  right:105%;
+  background-color: rgba(0,0,0,0.5);
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  line-height: normal;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
 #tooltip:hover .printery_address_tooltip,
-#tooltip:hover .ad_image_tooltip{
+#tooltip:hover .ad_image_tooltip,
+#tooltip:hover .options_tooltip
+{
   visibility: visible;
 }
 

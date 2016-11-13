@@ -57,7 +57,7 @@ export const Files = new FilesCollection({
   storagePath: function () {
     const date = new Date();
     const year = date.getFullYear();
-    const month = date.getMonth();
+    const month = date.getMonth() + 1;
 
     return '/Users/ugur/Desktop/FILISRC/print/data/files/'+year+'/'+month;
   },

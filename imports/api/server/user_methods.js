@@ -68,5 +68,16 @@ Meteor.methods({
 
 
       .save(file.path.split('.')[0] + '_processed.pdf');
+  },
+
+
+
+  user_delete_recently_added_file(fid) {
+    const file = Files.findOne(fid);
+    if (file && file.meta.user == Meteor.userId()) {
+      Files.remove(fid);
+    }else {
+      throw new Meteor.Error(450, 'Hata! Yetki verilemedi');
+    }
   }
 });

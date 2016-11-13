@@ -87,6 +87,16 @@ Template.UserAddNewDoc.events({
     }
   },
 
+  'click #user_delete_recently_added_file'(event, instance) {
+    Meteor.call('user_delete_recently_added_file', this._id, function(err, data) {
+      if (err) {
+        toastr.error(err.reason);
+      }else {
+        toastr.info("Dosya Silindi!")
+      }
+    });
+  }
+
 });
 
 

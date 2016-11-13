@@ -486,6 +486,38 @@ Template.AdminEditPrintery.onRendered(() => {
 
         map.addListener('rightclick', function(e) {
           printery_marker.setPosition({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+          printery_marker.setIcon("/img/printery_icon.png")
+        });
+
+      }else {
+        const printery_marker = new google.maps.Marker({
+          map: map,
+          icon: "/img/printery_icon.png",
+          position: {lat: 41.008238, lng: 28.978359},
+          draggable: true
+        });
+        PRINTERY_MARKER = printery_marker;
+
+        map.setCenter(printery_marker.getPosition());
+        map.setZoom(10);
+
+
+
+
+        MARKER_INFO = new google.maps.InfoWindow({
+          content: '<input type="button" onclick="markerClicked('+printery_marker.position.lat()+','+printery_marker.position.lng()+');" class="button alt" value="Bu işaretçiyi seç">'
+        });
+        printery_marker.addListener('click', function() {
+          MARKER_INFO.open(map, printery_marker);
+        });
+        printery_marker.addListener('dragend', function() {
+          MARKER_INFO.setContent('<input type="button" onclick="markerClicked('+printery_marker.position.lat()+','+printery_marker.position.lng()+');" class="button alt" value="Bu işaretçiyi seç">');
+          printery_marker.setIcon("/img/printery_icon.png")
+        });
+
+        map.addListener('rightclick', function(e) {
+          printery_marker.setPosition({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+          printery_marker.setIcon("/img/printery_icon.png")
         });
       }
 
