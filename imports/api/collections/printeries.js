@@ -13,6 +13,7 @@ Printeries.attachSchema(new SimpleSchema({
   authorized_phone : { type: String, optional: true },
   location_lat     : { type: String, optional: true },
   location_lng     : { type: String, optional: true },
+  pickup           : { type: Boolean, optional: true },
 
   shortid : {
     type: String,

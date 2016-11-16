@@ -378,15 +378,27 @@
                             <span class="ad_image_tooltip">Düzenlemek için tıklayın</span>
                           </a>
                         </div>
-                        <div class="2u 2u(medium) 6u(small) right-aligned" style="line-height:1.2em;margin-top:10px;">
+                        <div class="2u 2u(medium) 6u(small) right-aligned" style="line-height:1.2em;margin-top:10px;font-size:0.9em;">
+                          <strong>Yayın: </strong><br />
                           <strong>Gösterim: </strong><br />
                           <strong>Cinsiyet: </strong><br />
                           <strong>Yaş Aralığı: </strong><br />
+                          {{#if meta.activated }}
+                            <strong>Önizleme: </strong><br />
+                          {{else}}
+                            <strong>Aktifleştir: </strong><br />
+                          {{/if}}<br />
                         </div>
-                        <div class="3u 3u(medium) 6u(small) left-aligned" style="line-height:1.2em;margin-top:10px;">
+                        <div class="3u 3u(medium) 6u(small) left-aligned" style="line-height:1.2em;margin-top:10px;font-size:0.9em;">
+                          {{#if meta.activated }}
+                            <span style="color:green;">Aktif!</span>
+                          {{else}}
+                            <span style="color:red;">Pasif!</span>
+                          {{/if}}<br />
                           {{ meta.showcount }}<br />
                           {{ sexToString meta.sex }}<br />
                           {{ meta.age_min }} - {{ meta.age_max }}<br />
+                          <a id="admin_preview_ad_a4" target="__blank" style="cursor:pointer;">Tıklayın</a><br />
                        </div>
                       </div>
                       {{/if}}
@@ -635,6 +647,48 @@
               <script type="text/javascript">$('#add_new_advertiser_ad_keywords_edit').tagsinput();</script>
             {{/if}}
           {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<template name="AdminAdvertiserAdPreviewOnPDF">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium) center-aligned">
+          {{#with ad }}
+            <div class="row 200%">
+              <div class="12u 12u(medium) important(medium) center-aligned">
+                <!-- <div class="row">
+                  <div class="12u 12u(medium) center-aligned">
+                    <img src="{{ ad.link }}" width="100%" style="max-width:672px;border:1px dashed #ddd;padding:10px;border-radius:6px;" /><br />
+                  </div>
+                </div> -->
+
+                <div class="row">
+                  <div class="2u 2u(medium) 0u(small)"></div>
+                  <div class="8u 8u(medium) 12u(small) important(medium) center-aligned" id="admin-preview-ad-on-pdf" style="height:620px;"></div>
+                  <div class="2u 2u(medium) 0u(small)"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="9u 8u(medium) 12u(small)">
+                {{#if ad.meta.activated }}
+                  <a type="button" class="button fluid-button clean-button icon fa-circle-o" id="admin_passivate_ad" style="cursor:pointer;">Reklamı Pasif Yap</a>
+                {{else}}
+                  <a type="button" class="button fluid-button clean-button icon fa-check" id="admin_activate_ad" style="cursor:pointer;">Reklamı Onayla</a>
+                {{/if}}
+              </div>
+              <div class="3u 4u(medium) 12u(small)">
+                <a type="button" class="button fluid-button alt clean-button icon fa-undo" href="{{ pathFor 'admin_ads_list_advertiser_ads' advSID=ad.meta.advertiser }}">Geri</a>
+              </div>
+            </div>
+          {{/with}}
         </div>
       </div>
     </div>

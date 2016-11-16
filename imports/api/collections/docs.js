@@ -1,4 +1,5 @@
 export const Docs = new Mongo.Collection("docs");
+
 import { FilesCollection } from 'meteor/ostrio:files';
 
 import shortid from 'shortid';
@@ -6,9 +7,10 @@ import shortid from 'shortid';
 
 Docs.attachSchema(new SimpleSchema({
   user             : { type: String, optional: true },
-  file             : { type: String, optional: true },
-  name             : { type: String, optional: true },
-  keywords         : { type: [String], optional: true },
+  files            : { type: [String], optional: true },
+  pickup           : { type: String, optional: true },
+  is_confirmed     : { type: Boolean, optional: true },
+  is_printed       : { type: Boolean, optional: true },
 
   shortid : {
     type: String,
@@ -64,6 +66,29 @@ export const Files = new FilesCollection({
   onBeforeUpload: function(file) {
     // if file size < 10x2 Mbyte and file extension is pdf
     if (file.size <= 10485760*5) {
+      if (/pdf/i.test(file.extension)) {
+        return true;
+      }else {
+        return "452"; // dosya pdf degil
+      }
+    }else {
+      return "453"; // dosya cok buyuk
+    }
+  }
+});
+
+
+
+export const Samples = new FilesCollection({
+  collectionName: 'Samples',
+  allowClientCode: false,
+  storagePath: function () {
+
+    return '/Users/ugur/Desktop/FILISRC/print/data/samples/files/';
+  },
+  onBeforeUpload: function(file) {
+    // if file size < 10x2 Mbyte and file extension is pdf
+    if (file.size <= 10485760*1) {
       if (/pdf/i.test(file.extension)) {
         return true;
       }else {

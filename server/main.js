@@ -36,7 +36,10 @@ Meteor.startup(() => {
 AccountsTemplates.configure({
   postSignUpHook: function(userId, info) {
     Roles.addUsersToRoles(userId, ['user']);
-    profile = {'name': "", 'gender': "", 'age': "", 'address': "", 'shortid': shortid.generate()};
-    Meteor.users.update({ _id: userId}, {$set: { profile: profile }});
+    const profile = {'name': "", 'gender': "", 'age': "", 'address': "", 'shortid': shortid.generate()};
+    const printhistory = new Array();
+    const current_date = new Date();
+    const subscription_ends = current_date.setDate(current_date.getDate() + 30);
+    Meteor.users.update({ _id: userId}, {$set: { profile: profile, recentpages: 0, printhistory: printhistory, subscription: subscription_ends }});
   },
 });

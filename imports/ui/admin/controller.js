@@ -1,12 +1,16 @@
 import { Advertisers } from '/imports/api/collections/advertisers.js';
 import { Printeries } from '/imports/api/collections/printeries.js';
 import { Ads } from '/imports/api/collections/ads.js';
-
+import { Samples } from '/imports/api/collections/docs.js';
 
 import './layout.html';
 import './ads.html';
 import './printeries.html';
 import './users.html';
+
+
+
+
 
 /**********************************************
 template helpers
@@ -22,6 +26,7 @@ Template.AdminListAdvertisers.helpers({
       });
   },
 });
+
 
 Template.AdminShowAdvertiser.helpers({
   advertiser() {
@@ -83,6 +88,29 @@ Template.AdminAddNewAdvertiserAdContinueEdit.helpers({
   },
 });
 
+
+Template.AdminAdvertiserAdPreviewOnPDF.onRendered(function() {
+  FlowRouter.subsReady("admin_single_advertiser_ad", function() {
+    $.getScript("/js/pdfobject.js")
+      .done(function(script, textStatus) {
+        Tracker.autorun(function(){
+          AA = Samples.findOne({ 'meta.adminsample': true, 'meta.ad': FlowRouter.getParam('FID') });
+          if (AA) {
+            PDFObject.embed(AA.link(), "#admin-preview-ad-on-pdf");
+          }
+        });
+    });
+  });
+});
+
+Template.AdminAdvertiserAdPreviewOnPDF.helpers({
+  ad() {
+    return Ads.findOne();
+  },
+});
+
+
+
 /////////////////////////////////////// printery
 
 
@@ -125,6 +153,9 @@ Template.AdminListUsers.helpers({
       });
   },
 });
+
+
+
 
 
 
@@ -241,7 +272,7 @@ Template.AdminAddNewAdvertiserAd.events({
         }
         const uploadInstance = Ads.insert({
           file: file,
-          meta: { 'advertiser': FlowRouter.getParam('advSID'), 'tmp': true, createdAt: new Date() },
+          meta: { 'advertiser': FlowRouter.getParam('advSID'), 'tmp': true, createdAt: new Date(), 'activated': false },
           streams: 'dynamic',
           chunkSize: 'dynamic'
         }, false);
@@ -376,9 +407,33 @@ Template.AdminAddNewAdvertiserAdContinueEdit.events({
 });
 
 
+Template.AdminListAdvertiserAds.events({
+  'click #admin_preview_ad_a4'(event, instance) {
+    const fid = this._id;
+    Meteor.call('admin_preview_ad_a4', this._id, function(err, data) {
+      if (err) { toastr.warning(err.reason); }
+      else{
+        toastr.info("Önizleme dosyası oluşturuldu.");
+        FlowRouter.go('admin_add_preview_on_pdf', { FID: fid });
+      }
+    });
+  }
+});
 
-
-
+Template.AdminAdvertiserAdPreviewOnPDF.events({
+  'click #admin_activate_ad'(event, instance) {
+    Meteor.call('admin_activate_ad', this._id, function(err, data) {
+      if (err) { toastr.warning(err.reason); }
+      else { toastr.success("Reklam aktifleştirildi!"); }
+    });
+  },
+  'click #admin_passivate_ad'(event, instance) {
+    Meteor.call('admin_passivate_ad', this._id, function(err, data) {
+      if (err) { toastr.warning(err.reason); }
+      else { toastr.warning("Reklam pasifleştirildi!"); }
+    });
+  },
+});
 
 
 
@@ -421,6 +476,7 @@ Template.AdminAddNewPrintery.events({
           toastr.error(err.reason);
         }else {
           toastr.success('Yeni Matbaa Eklendi!');
+          FlowRouter.go('admin_printeries_edit_printery', { prntSID: data });
         }
       });
     }else {
@@ -604,6 +660,7 @@ Template.AdminEditPrintery.events({
           toastr.error(err.reason);
         }else {
           toastr.success('Matbaa Güncellendi!');
+          FlowRouter.go('admin_printeries_list_printeries');
         }
       });
     }else {

@@ -16,3 +16,17 @@
     </div>
   </div>
 </template>
+
+
+<template name="UserLayout">
+  <div id="page-wrapper">
+    {{#if isInRole 'user' }}
+      {{> Template.dynamic template=header}}
+      {{> Template.dynamic template=panel}}
+      {{> Template.dynamic template=main}}
+      {{> Template.dynamic template=footer}}
+      {{else}}
+        {{> NotInRolePage }}
+      {{/if}}
+  </div>
+</template>

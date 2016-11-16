@@ -18,3 +18,12 @@ Template.registerHelper('sexToString', function(s){
   if (s === '2') { return "Erkek"; }
   if (s === '3') { return "Kadın"; }
 });
+
+
+
+Template.registerHelper("isValidPDF", function(fid){
+  return ReactiveMethod.call("user_is_pdf_valid", fid, function(err, data) {
+    if (err) { return false; }
+    else { return data;  }
+  });
+});

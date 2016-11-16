@@ -11,6 +11,11 @@ routes
 const adminRoutes = FlowRouter.group({ prefix: '/manage', name: 'admin'});
 
 adminRoutes.route('/', { name: 'admin_dashboard',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_list_samples', Meteor.subscribe("admin_list_samples"));
+    }
+  },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminFirstPage' });
     NProgress.done();
@@ -45,7 +50,9 @@ adminAdRoutes.route('/show/:advSID', { name: 'admin_ads_show_advertiser',
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminShowAdvertiser' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_single_advertiser", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -57,7 +64,9 @@ adminAdRoutes.route('/edit/:advSID', { name: 'admin_ads_edit_advertiser',
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminEditAdvertiser' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_single_advertiser", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -70,7 +79,9 @@ adminAdRoutes.route('/list', { name: 'admin_ads_list_advertisers',
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListAdvertisers' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_list_advertisers", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -83,7 +94,9 @@ adminAdRoutes.route('/:advSID/ads', { name: 'admin_ads_list_advertiser_ads',
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListAdvertiserAds' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_list_ads_for_advertiser", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -95,7 +108,9 @@ adminAdRoutes.route('/:advSID/new', { name: 'admin_ads_add_new_advertiser_ad',
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewAdvertiserAd' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_recenty_added_advertiser_ad", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -107,7 +122,9 @@ adminAdRoutes.route('/:advSID/new/continue', { name: 'admin_ads_add_new_advertis
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewAdvertiserAdContinue' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_recenty_added_advertiser_ad", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -119,7 +136,24 @@ adminAdRoutes.route('/:FID/edit', { name: 'admin_ads_add_new_advertiser_ad_conti
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAddNewAdvertiserAdContinueEdit' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_single_advertiser_ad", function() {
+      NProgress.done();
+    });
+  }
+});
+
+adminAdRoutes.route('/preview/:FID', { name: 'admin_add_preview_on_pdf',
+  subscriptions: function(params, queryParams) {
+    if(Meteor.isClient) {
+      this.register('admin_single_advertiser_ad', Meteor.subscribe("admin_single_advertiser_ad", params.FID));
+      this.register('admin_list_samples', Meteor.subscribe("admin_list_samples", params.FID));
+    }
+  },
+  action(params) {
+    BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminAdvertiserAdPreviewOnPDF' });
+    FlowRouter.subsReady("admin_single_advertiser_ad", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -152,7 +186,9 @@ adminPrinteryRoutes.route('/edit/:prntSID', { name: 'admin_printeries_edit_print
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminEditPrintery' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_single_printery", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -164,7 +200,9 @@ adminPrinteryRoutes.route('/list', { name: 'admin_printeries_list_printeries',
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListPrinteries' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_list_printeries", function() {
+      NProgress.done();
+    });
   }
 });
 
@@ -187,7 +225,9 @@ adminUserRoutes.route('/list', { name: 'admin_list_users',
   },
   action() {
     BlazeLayout.render('AdminLayout', { header: 'Header', footer: 'Footer', panel: 'AdminPanel', main: 'AdminListUsers' });
-    NProgress.done();
+    FlowRouter.subsReady("admin_list_users", function() {
+      NProgress.done();
+    });
   }
 });
 

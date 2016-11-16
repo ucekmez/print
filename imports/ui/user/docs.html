@@ -40,6 +40,7 @@
                       <th>Dosya Adı</th>
                       <th>Dosya Boyutu</th>
                       <th>Sayfa Sayısı</th>
+                      <th>Geçerli PDF</th>
                       <th>İşlemler</th>
                     </tr>
                   </thead>
@@ -47,9 +48,18 @@
                     {{#each tmpfiles }}
                       <tr class="left-aligned" style="text-decoration:none;">
                         <th scope="row">{{ index }}</th>
-                            <td><a href="{{fileURL this }}" target="_blank">{{ name }}</a></td>
-                            <td>{{ getFileSize size }}</td>
-                            <td>XX Sayfa</td>
+                        <td><a href="{{fileURL this }}" target="_blank">{{ name }}</a></td>
+                        <td>{{ getFileSize size }}</td>
+                        <td>{{ getNumPages _id }} sayfa</td>
+                        <td>{{#if isValidPDF _id}}
+                              <a class="icon fa-thumbs-o-up green-icon big-icon"></a>
+                            {{else}}
+                              <label id="tooltip">
+                                <a class="icon fa-thumbs-o-down red-icon big-icon"></a>
+                                <span class="options_tooltip">Bu PDF geçerli değildir! Lütfen siliniz.</span>
+                              </label>
+                            {{/if}}
+                        </td>
                         <td>
                           <label id="tooltip">
                             <a class="icon fa-trash-o red-icon big-icon" id="user_delete_recently_added_file"  style="cursor:pointer;"></a>
@@ -58,16 +68,35 @@
                         </td>
                       </tr>
                     {{/each}}
+                    <tr class="left-aligned" style="text-decoration:none;">
+                      <th scope="row"></th>
+                      <td></td>
+                      <td></td>
+                      <td>
+                        {{#if currentUser.recentpages }}
+                          {{ currentUser.recentpages }}
+                        {{else}}
+                          0
+                        {{/if}}
+                         toplam
+                       </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
                   </tbody>
                 </table>
                 </div>
               </div>
               <div class="row">
                 <div class="9u 8u(medium)">
-                  <a href="#" class="button fluid-button clean-button icon fa-check">Devam et</a>
+                  <!-- {{#if numPagesLittleThan 100 }} -->
+                    <a href="{{ pathFor 'user_see_available_pickups' }}" class="button fluid-button clean-button icon fa-check">Onayla ve Devam Et</a>
+                  <!-- {{else}}
+                    <a class="button fluid-button clean-button icon fa-check">En fazla 100 sayfa ekleyebilirsiniz</a>
+                  {{/if}} -->
                 </div>
                 <div class="3u 4u(medium)">
-                  <a href="#" class="button fluid-button clean-button alt icon fa-remove">İptal</a>
+                  <a id="user_cancel_upload_file" style="cursor:pointer;" class="button fluid-button clean-button alt icon fa-remove">İptal</a>
                 </div>
               </div>
             {{/if}}
@@ -78,6 +107,136 @@
   </div>
 </template>
 
+
+<template name="UserSeePickupLocations">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <h3>Çıktılarınızı teslim alacağınız noktayı haritadan seçin</h3>
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium)">
+            <div id="content" style="height:300px;">
+                {{> googleMap name="pickupLocations" options=mapOptions}}
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="6u 6u(medium) 12u(small) important(medium)">
+            <div id="content" class="chosenPickupInfoArea">
+              <span id="chosenPickup">
+                <h2><span id="userPickupName"></span> <span style="font-size:0.5em;font-weight:600;vertical-align:top;" class="label label-info">Teslim Noktası</span></h2>
+                <strong>Adres:</strong> <span id="userPickupAddress"></span>
+                <strong>Tel:</strong> <span id="userPickupPhone"></span><br />
+                <strong>Eposta:</strong> <span id="userPickupEmail"></span>
+              </span>
+            </div>
+        </div>
+        <div class="6u 6u(medium) 12u(small) important(medium) center-aligned">
+          <a href="#" class="button fluid-button clean-button icon fa-check" id="chosenPickupButton">Seç ve devam et</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="12u 12u(medium) 12u(small) important(medium) center-aligned">
+          <a href="{{ pathFor 'user_add_new_doc' }}" class="button alt fluid-button clean-button icon fa-undo">Geri</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="UserConfirmDocsAndPickup">
+  <!-- Main -->
+  <div id="main-wrapper">
+    <div class="container">
+      <h3>Seçiminizi onaylayın</h3>
+      <div class="row 200%">
+        <div class="12u 12u(medium) important(medium)">
+            <div id="content">
+              {{#if subsReady 'user_selected_doc_process'}}
+                {{#if doc }}
+                  {{#with pickupInformation doc.pickup }}
+                  <div class="row">
+                    <div class="6u 12u(medium) 12u(small) important(medium) left-aligned" style="line-height:1.4em;">
+                      <h2 style="margin-bottom:10px;">{{ name }} <span style="font-size:0.5em;font-weight:600;vertical-align:top;" class="label label-info">Teslim Noktası</span></h2>
+                      <strong>Adres:</strong> {{ address }}<br />
+                      <strong>Tel:</strong> {{ phone }}<br />
+                      <strong>Eposta:</strong> {{ email }}
+
+                      <div id="content" style="height:200px;margin-top:10px;">
+                          {{> googleMap name="pickupLocation" options=mapOptions}}
+                      </div>
+                    </div>
+                    <div class="6u 12u(medium) 12u(small) important(medium) left-aligned">
+                      {{#if tmpfiles }}
+                        <div class="row 200%" style="padding-top:10px;">
+                          <div class="12u 12u(medium) important(medium) center-aligned">
+                            <table class="table">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Dosya Adı</th>
+                                <th>Boyut</th>
+                                <th>Sayfa Sayısı</th>
+                                <th>Sil</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {{#each tmpfiles }}
+                                <tr class="left-aligned" style="text-decoration:none;">
+                                  <th scope="row">{{ index }}</th>
+                                  <td><a href="{{fileURL this }}" target="_blank">{{ name }}</a></td>
+                                  <td>{{ getFileSize size }}</td>
+                                  <td>{{ getNumPages _id }} sayfa</td>
+                                  <td>
+                                    <label id="tooltip">
+                                      <a class="icon fa-trash-o red-icon big-icon" id="user_delete_recently_added_file"  style="cursor:pointer;"></a>
+                                      <span class="options_tooltip">Silmek için tıklayın</span>
+                                    </label>
+                                  </td>
+                                </tr>
+                              {{/each}}
+                              <tr class="left-aligned" style="text-decoration:none;">
+                                <th scope="row"></th>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                  {{#if currentUser.recentpages }}
+                                    {{ currentUser.recentpages }}
+                                  {{else}}
+                                    0
+                                  {{/if}}
+                                   toplam
+                                 </td>
+                                <td></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          </div>
+                        </div>
+                      {{/if}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="9u 8u(medium)">
+                      <a class="button fluid-button clean-button icon fa-check">Onayla ve Baskıya Gönder</a>
+                    </div>
+                    <div class="3u 4u(medium)">
+                      <a href="{{ pathFor 'user_see_available_pickups' }}" class="button fluid-button clean-button alt icon fa-undo">Geri</a>
+                    </div>
+                  </div>
+                  {{/with}}
+
+                {{/if}}
+              {{else}}
+                İçerik yükleniyor...
+              {{/if}}
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</template>
 
 
 

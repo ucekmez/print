@@ -1,28 +1,4 @@
-import { Session } from 'meteor/session';
-
-import '/imports/ui/landing/loading.html';
-
-// loading mesajlari
-var message = '<p class="loading-message">Yükleniyor</p>';
-var spinner = '<div class="spinner"><div><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>';
-Template.LoadingLayout.rendered = function () {
-  if ( ! Session.get('loadingSplash') ) {
-    this.loading = window.pleaseWait({
-      logo: '/img/logo.png',
-      backgroundColor: '#7f8c8d',
-      loadingHtml: message + spinner
-    });
-    Session.set('loadingSplash', true); // just show loading splash once
-  }
-};
-
-Template.LoadingLayout.destroyed = function () {
-  if ( this.loading ) {
-    this.loading.finish();
-  }
-};
-
-
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 T9n.setLanguage("tr");
 

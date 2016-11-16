@@ -1,83 +1,100 @@
 import { Docs, Files } from '/imports/api/collections/docs.js';
+import { Printeries } from '/imports/api/collections/printeries.js';
 
 import PDFtools from 'fili1';
-import PDFErrorHandler from 'fili1/src/error/PDFErrorHandler.js';
 
 
 Meteor.methods({
-  user_assign_file_to_doc(fid) {
-    const file = Files.findOne(fid);
-    var session = PDFtools.startEdit(file.path, {
-        media: 'A4',
-        writePageMetadataIntoFile: true,
-        forceEdit: false,
-        checkProportions: false,
-    },
-    {
-        onComplete: function (report) {},
-        onError: function (err) {
-            PDFErrorHandler(err, true);
-        }
-    });
-
-
-    process.on('uncaughtException', session.getErrorHandler());
-
-    session
-      .loadImage([
-          PDFtools.image("ml", 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/322px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg', true)
-      ])
-
-      .loadText([
-          PDFtools.text("pumpkin", "BEKLEDİĞİNİZ LEZZET PUMPKIN SPICE\nGERİ DÖNDÜ!", "left", "Arial", 14, 0xffffff),
-          PDFtools.text("yildiz", "Yıldızlarla bir asra atılan imza...", "left", "Arial", 14, 0xffffff),
-          PDFtools.text("numara", "__", "center", "Arial", 50, 0x00, function (line, page) {
-              return line.replace("__", page.index);
-          })
-      ])
-
-      .loadFont(PDFtools.font('Arial', '/Users/ugur/Desktop/FILISRC/print/data/arial.ttf'))
-
-      .setInfo({
-          author: 'PDFtools',
-          title: 'PDFtools',
-          subject: 'PDFtools',
-          creator: 'PDFtools'
-      })
-
-      .select("all", function (page) {
-          page.setStyle({
-              "valign": "top",
-              "margin": [10, '15%', 10, '15%'],
-              "horizontalSides": {
-                  "mode": "singleSided", // doubleSided
-                  "startFrom": "right",
-                  "swap": "odd"
-              }
-          })
-              .addBanner("ml", "right", {
-                  "valign": "top",
-                  "align": "center"
-              })
-              .addText("numara", "right", {
-                  "valign": "middle",
-                  "align": "center",
-                  "scale": "original"
-              });
-      })
-
-
-      .save(file.path.split('.')[0] + '_processed.pdf');
-  },
-
-
-
   user_delete_recently_added_file(fid) {
     const file = Files.findOne(fid);
     if (file && file.meta.user == Meteor.userId()) {
       Files.remove(fid);
+      Meteor.call('user_update_profile_for_recent_file', function(err, data) {});
     }else {
       throw new Meteor.Error(450, 'Hata! Yetki verilemedi');
     }
+  },
+
+  user_get_num_pages(fid) {
+    const file = Files.findOne(fid);
+    if (file && file.meta.user == Meteor.userId()) {
+      return PDFtools.getNumPages(file.path);
+    }else {
+      throw new Meteor.Error(450, 'Hata! Yetki verilemedi');
+    }
+  },
+
+  user_is_pdf_valid(fid) {
+    const file = Files.findOne(fid);
+    if (file && file.meta.user == Meteor.userId()) {
+      return PDFtools.isPDFValid(file.path);
+    }else {
+      throw new Meteor.Error(450, 'Hata! Yetki verilemedi');
+    }
+  },
+
+  user_check_if_valid_num_pages(fid) {
+    const file = Files.findOne(fid);
+
+    if (PDFtools.isPDFValid(file.path)) {
+      if (file && file.meta.user == Meteor.userId()) {
+        const file_numpages = PDFtools.getNumPages(file.path);
+        const user = Meteor.user();
+        const files_count = Files.find({ 'meta.user': user._id, 'meta.valid': true, 'meta.tmp': true }).count()
+        if (file_numpages > 100 || user.recentpages+file_numpages > 100 || files_count > 4) {
+          Files.remove(fid);
+        }else {
+          Files.update({ _id: fid }, { $set: { 'meta.valid': true }});
+          return "ok";
+        }
+      }else {
+        throw new Meteor.Error(450, 'Hata! Yetki verilemedi');
+      }
+    }else {
+      Files.remove(fid);
+      throw new Meteor.Error(448, 'Hata! Lütfen geçerli bir PDF yükleyin');
+    }
+  },
+
+  user_update_profile_for_recent_file() {
+    const files = Files.find({ 'meta.user': Meteor.userId(), 'meta.tmp': true }).fetch();
+    let total_pages = 0;
+    files.forEach(function(f) { total_pages += PDFtools.getNumPages(f.path); });
+    Meteor.users.update({_id: Meteor.userId()}, { $set: {
+      'recentpages': total_pages
+    }});
+  },
+
+  user_cancel_upload_file() {
+    const user_id = Meteor.userId();
+    Files.remove({ 'meta.user': user_id});
+    Meteor.call('user_update_profile_for_recent_file', function(err, data) {});
+  },
+
+  user_assign_file_to_doc(pickup_id) {
+    const pickup = Printeries.findOne(pickup_id);
+    if (pickup) {
+      const files = new Array();
+      Files.find({ 'meta.user': Meteor.userId(), 'meta.tmp': true }).fetch().forEach(function(f) {
+        files.push(f._id);
+      });
+
+      const exists = Docs.findOne({'user': Meteor.userId(), 'is_confirmed': false });
+
+      if (exists) {
+        Docs.update({ _id: exists._id}, { $set: { 'pickup': pickup.shortid }});
+        return exists._id;
+      }else {
+        const doc_id = Docs.insert({
+          user: Meteor.userId(),
+          files: files,
+          pickup: pickup.shortid,
+          is_confirmed: false,
+        });
+
+        return doc_id;
+      }
+    }
   }
+
 });

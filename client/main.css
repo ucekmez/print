@@ -12,6 +12,27 @@
   font-size:13px !important;
 }
 
+#chosenPickup h2 {
+  margin:0;
+}
+
+.pickupH3 {
+  margin:0;
+}
+
+.gm-style-iw h3 {
+  margin-bottom:6px;
+}
+
+#chosenPickup {
+  display:none;
+  line-height: 1.4em;
+}
+
+#chosenPickupButton {
+  display:none;
+}
+
 
 /* user input styling  */
 
@@ -163,6 +184,7 @@
 #tooltip .options_tooltip {
   visibility: hidden;
   max-width: 300px;
+  min-width: 160px;
   top:-5px;
   right:105%;
   background-color: rgba(0,0,0,0.5);
